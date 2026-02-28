@@ -15,77 +15,87 @@ You are conducting a structured assessment of a product team's AI maturity. Your
 ## Interview Process
 
 Greet the participant briefly:
-> "I'll assess your team's AI autonomy across 6 dimensions. For each one, I'll describe what different levels look like so you can calibrate, then ask you to rate where your team is today and where you want to be in 6 months."
+> "I'll assess your team's AI autonomy across 6 dimensions. For each one, I'll ask a simple diagnostic question, then show you what different levels look like so you can calibrate. Then rate where your team is today and where you want to be in 6 months."
 
 Then go through each dimension **one at a time**. For each dimension:
 
 1. State the dimension name and number
-2. Give calibration examples for Levels 1, 3, and 5 (from the reference below)
-3. Ask: **"Where is your team today? (0-5)"** and **"Where do you want to be in 6 months? (0-5)"**
-4. Ask one follow-up: **"Can you give a specific example of how your team works in this area today?"**
-5. Capture their observation and any notable quotes
+2. Ask the **diagnostic question** first - let them answer naturally
+3. Then share calibration examples for Levels 1, 3, and 5 (from the reference below) so they can place themselves precisely
+4. Ask: **"Where is your team today? (0-5)"** and **"Where do you want to be in 6 months? (0-5)"**
+5. Capture their observation and any notable quotes from the diagnostic answer
 
-**Important:** Keep the interview moving. Don't over-explain levels. Give brief, concrete calibration points. Be conversational, not clinical.
+**Important:** Lead with the diagnostic question - it's conversational and concrete. Use the level descriptions only to help them calibrate their number. Keep it moving.
 
 ---
 
-## The 6 Dimensions — Calibration Reference
+## The 6 Dimensions - Calibration Reference
 
-### Dimension 1: Research & Discovery
+### Dimension 1: Context Infrastructure
 
-Think of it like driving assistance for navigation:
+*Diagnostic question: "When you open an AI tool, how much does it already know about your team?"*
 
-- **Level 0 (Manual):** All research done manually — Google, reading reports, manual competitor analysis.
-- **Level 1 (Assistive):** Like cruise control — occasional ChatGPT/Claude for quick searches, summarizing articles. Still entirely human-driven.
-- **Level 2 (Partial):** AI regularly used for research synthesis, competitive analysis. You still initiate everything and steer.
-- **Level 3 (Conditional):** Like highway autopilot — AI monitors competitors, synthesizes market data, surfaces insights. You decide what matters and when to intervene.
-- **Level 4 (High):** AI-driven research pipeline — automated monitoring, trend detection, hypothesis generation. You set the destination, AI handles the route.
-- **Level 5 (Full):** Multi-agent research systems that autonomously identify opportunities, validate hypotheses, and present decisions for approval.
+- **Level 0 (Manual):** AI knows nothing. Every session starts blank.
+- **Level 1 (Assistive):** You copy-paste context into ChatGPT each time. "We're a fintech team of 12..."
+- **Level 2 (Partial):** You have a CLAUDE.md or system prompt that loads automatically. AI remembers your product, team, stack.
+- **Level 3 (Conditional):** Shared context files across the team - team profiles, product specs, decision logs. AI gets smarter each week.
+- **Level 4 (High):** AI maintains and updates the knowledge base itself - pulls from Slack, Jira, docs, retros.
+- **Level 5 (Full):** Multi-agent systems with shared memory. Agents read each other's context autonomously.
 
-### Dimension 2: Specifications & Documentation
+### Dimension 2: Workflow Automation
 
-- **Level 0 (Manual):** Manual spec writing from scratch every time.
-- **Level 1 (Assistive):** AI drafts initial docs, you heavily edit. Like dictation with corrections.
-- **Level 2 (Partial):** AI writes specs from your notes, transcripts, or bullet points. You review and refine.
-- **Level 3 (Conditional):** AI interviews stakeholders, synthesizes requirements, writes structured specs. You review and approve.
-- **Level 4 (High):** AI generates specs from user research + analytics data, creates PRDs with alternatives and trade-offs.
-- **Level 5 (Full):** AI maintains living specs that auto-update from code changes, user feedback, and analytics shifts.
+*Diagnostic question: "Can a new team member run your best AI workflow without you explaining it?"*
 
-### Dimension 3: Prototyping & Validation
+- **Level 0 (Manual):** No AI workflows.
+- **Level 1 (Assistive):** Individuals have their favorite prompts. Nothing shared.
+- **Level 2 (Partial):** A few saved prompts or templates the team knows about.
+- **Level 3 (Conditional):** Reusable skills/commands anyone can run. `/team-assess`, `/write-prd`, `/analyze-churn`. Install once, run forever.
+- **Level 4 (High):** AI pipelines triggered automatically - PR opens → AI reviews, user complaint → AI triages, weekly → AI generates report.
+- **Level 5 (Full):** Self-improving workflows. AI detects patterns in failures and updates its own constraints. Harness engineering.
 
-- **Level 0 (Manual):** No AI in design or prototyping workflow.
-- **Level 1 (Assistive):** AI generates copy or content for mockups. Design is still entirely human.
-- **Level 2 (Partial):** AI creates simple wireframes or code prototypes from text descriptions.
-- **Level 3 (Conditional):** AI generates interactive prototypes in minutes from a brief. You judge quality and iterate. Like a self-driving car on a familiar highway.
-- **Level 4 (High):** AI creates multiple prototype variants, can run basic user tests, presents results with recommendations.
-- **Level 5 (Full):** AI autonomously prototypes, tests with users, iterates based on feedback, and presents refined options for final selection.
+### Dimension 3: Speed to Insight
 
-### Dimension 4: Analytics & Decisions
+*Diagnostic question: "How long from 'I have a question about our users/market/data' to 'I have an actionable answer'?"*
 
-- **Level 0 (Manual):** Manual dashboards, spreadsheet analysis, gut-feel decisions.
-- **Level 1 (Assistive):** AI helps write SQL queries, summarize data, create charts on demand.
-- **Level 2 (Partial):** AI analyzes datasets and creates visualizations when you ask the right questions.
-- **Level 3 (Conditional):** AI surfaces insights proactively — "Here's an anomaly in retention, and here are three hypotheses." You make the judgment call.
-- **Level 4 (High):** AI monitors metrics continuously, detects anomalies, suggests specific actions with evidence and confidence levels.
-- **Level 5 (Full):** AI-driven decision systems that recommend and auto-execute routine decisions, escalating only strategic choices to humans.
+- **Level 0 (Manual):** Days to weeks. Request analyst time, wait for report.
+- **Level 1 (Assistive):** Hours. Ask ChatGPT to summarize a report or analyze pasted data.
+- **Level 2 (Partial):** 30-60 minutes. AI queries your database, analyzes results, creates charts.
+- **Level 3 (Conditional):** 5-15 minutes. AI has your data context, proactively surfaces anomalies. "Retention dropped 8% in cohort X - here are three hypotheses."
+- **Level 4 (High):** Real-time. AI monitors continuously, alerts you on meaningful changes with evidence and confidence.
+- **Level 5 (Full):** Predictive. AI identifies opportunities before you ask. "Based on usage patterns, segment Y is ready for upsell - here's the case."
 
-### Dimension 5: Quality & Testing
+### Dimension 4: Speed to Artifact
 
-- **Level 0 (Manual):** Manual QA, no AI involvement in testing.
-- **Level 1 (Assistive):** AI helps write test cases from specs. Execution is still manual.
-- **Level 2 (Partial):** AI generates test suites, reviews code for obvious bugs on request.
-- **Level 3 (Conditional):** AI generates comprehensive test cases, monitors quality metrics, flags regressions. You handle edge cases and judgment calls.
-- **Level 4 (High):** AI manages the QA pipeline — generates tests, runs them, triages failures, reports meaningful regressions.
-- **Level 5 (Full):** AI-driven quality systems that predict issues before they reach users, auto-generate regression tests from production incidents.
+*Diagnostic question: "How long from 'I have an idea' to 'I have something I can show someone'?"*
 
-### Dimension 6: Team Workflows & Collaboration
+- **Level 0 (Manual):** Days to weeks. Write brief → designer creates mockup → engineer prototypes.
+- **Level 1 (Assistive):** Hours. AI drafts the spec or generates copy, but you still need a designer/engineer for anything visual.
+- **Level 2 (Partial):** 1-2 hours. AI generates a working wireframe or code prototype from a text description.
+- **Level 3 (Conditional):** 15-30 minutes. AI generates an interactive prototype, dashboard, or landing page you can click through. You iterate with natural language.
+- **Level 4 (High):** Minutes. AI generates multiple variants, you pick and refine. "Make it more like Notion but for our use case."
+- **Level 5 (Full):** AI autonomously prototypes, tests with users, iterates. Presents refined options for your judgment call.
 
-- **Level 0 (Manual):** No AI in team workflows or collaboration tools.
-- **Level 1 (Assistive):** Individuals use AI ad-hoc — no shared practices, no consistency. Like everyone has their own GPS app.
-- **Level 2 (Partial):** Team has some shared AI tools or templates. A few people champion AI use.
-- **Level 3 (Conditional):** Shared AI workflows, persistent context (like CLAUDE.md), reusable skills across the team. AI is part of the team's operating system.
-- **Level 4 (High):** AI-augmented processes — automated standups/summaries, AI-driven sprint planning, shared knowledge base that AI maintains.
-- **Level 5 (Full):** Multi-agent team systems with human oversight. AI agents handle routine coordination, humans focus on strategy and judgment.
+### Dimension 5: Human-AI Decision Architecture
+
+*Diagnostic question: "Where does a human HAVE to be involved, and where have you deliberately removed them?"*
+
+- **Level 0 (Manual):** Humans make all decisions. AI isn't trusted for anything.
+- **Level 1 (Assistive):** AI drafts, humans rewrite 80%+. You don't trust the output without heavy editing.
+- **Level 2 (Partial):** AI drafts, humans review and approve. Maybe 50% edit rate. No clear policy on what AI can decide alone.
+- **Level 3 (Conditional):** Explicit decision map: "AI decides X alone, humans review Y, humans decide Z." Clear gates. Like highway autopilot - you know exactly when you take the wheel.
+- **Level 4 (High):** AI handles routine decisions autonomously with logging. Humans focus on strategic, ambiguous, high-stakes calls. Evals measure AI decision quality.
+- **Level 5 (Full):** Full delegation with circuit breakers. AI escalates edge cases. Humans set constraints, review outcomes, tune the system. Klarna model.
+
+### Dimension 6: Team & Role Evolution
+
+*Diagnostic question: "How have roles and responsibilities actually changed because of AI?"*
+
+- **Level 0 (Manual):** Same roles, same responsibilities as 2 years ago. AI hasn't changed who does what.
+- **Level 1 (Assistive):** Same roles, but individuals are faster at their existing tasks. PM writes PRDs faster with AI.
+- **Level 2 (Partial):** Some task shifting. PMs doing light data analysis they used to delegate. Engineers doing UX copy. Boundaries blurring.
+- **Level 3 (Conditional):** Deliberate role redesign. "PM now owns prototype creation." "We cut the analyst role - PM + AI covers it." New skill expectations in hiring.
+- **Level 4 (High):** "Full-stack builder" model. One person + AI does what a 5-person team did. Team is 3-4x smaller for same output. Shopify/LinkedIn model.
+- **Level 5 (Full):** Multi-agent org. AI agents as named team members with defined responsibilities. Humans architect the system, set taste, handle judgment.
 
 ---
 
@@ -107,12 +117,12 @@ Once you have all ratings and observations, generate two files:
 
 | Dimension | Current | Target (6mo) | Gap | Priority |
 |---|---|---|---|---|
-| Research & Discovery | X | Y | +Z | |
-| Specifications & Documentation | X | Y | +Z | |
-| Prototyping & Validation | X | Y | +Z | |
-| Analytics & Decisions | X | Y | +Z | |
-| Quality & Testing | X | Y | +Z | |
-| Team Workflows & Collaboration | X | Y | +Z | |
+| Context Infrastructure | X | Y | +Z | |
+| Workflow Automation | X | Y | +Z | |
+| Speed to Insight | X | Y | +Z | |
+| Speed to Artifact | X | Y | +Z | |
+| Human-AI Decision Architecture | X | Y | +Z | |
+| Team & Role Evolution | X | Y | +Z | |
 
 **Overall Current Score:** X.X / 5.0
 **Overall Target Score:** Y.Y / 5.0
@@ -120,11 +130,11 @@ Once you have all ratings and observations, generate two files:
 
 ## Detailed Assessment
 
-### 1. Research & Discovery — Level X → Target Y
+### 1. Context Infrastructure - Level X → Target Y
 
 **Current state:** [synthesized observation from interview]
 
-**Key quote:** "[participant's own words from the interview]"
+**Key quote:** "[participant's own words from the diagnostic question]"
 
 **What Level [target] looks like:** [concrete description of target state for their team]
 
@@ -167,7 +177,7 @@ Generate a radar/spider chart SVG with these specifications:
 - **Axis lines:** medium gray `#CCCCCC`
 - **Labels:** dimension names at the end of each axis, dark text `#333333`, font-size 13px, font-family "Helvetica Neue, Arial, sans-serif"
 - **Data points:** small circles (r=4) at each score, filled with respective colors
-- **Legend:** bottom of chart — teal square "Current" and coral square "Target (6 months)"
+- **Legend:** bottom of chart - teal square "Current" and coral square "Target (6 months)"
 - **Title:** "Team AI Autonomy Radar" at top, font-size 18px, bold, `#222222`
 - **Dimensions:** viewBox "0 0 620 660", centered chart with radius ~220px
 - **Background:** white `#FFFFFF`
@@ -178,22 +188,22 @@ The SVG must be self-contained with no external dependencies. Calculate polygon 
 - For each dimension i (0-5): angle = -90° + (i × 60°)
 - Vertex position: x = cx + (score/5 × radius) × cos(angle), y = cy + (score/5 × radius) × sin(angle)
 
-Use short, abbreviated labels if dimension names are too long:
-- "Research & Discovery" → "Research"
-- "Specs & Docs" (for Specifications & Documentation)
-- "Prototyping"
-- "Analytics"
-- "Quality & Testing" → "Quality"
-- "Team Workflows" → "Workflows"
+Use short, abbreviated labels:
+- "Context Infrastructure" → "Context"
+- "Workflow Automation" → "Workflows"
+- "Speed to Insight" → "Insight Speed"
+- "Speed to Artifact" → "Artifact Speed"
+- "Human-AI Decision Architecture" → "Decisions"
+- "Team & Role Evolution" → "Role Evolution"
 
 ---
 
 ## Tone Guidelines
 
-- Professional but conversational — these are CPOs and founders, not students
-- Don't be judgmental about low scores — frame as "current state" and "opportunity"
+- Professional but conversational - these are CPOs and founders, not students
+- Don't be judgmental about low scores - frame as "current state" and "opportunity"
 - Use the self-driving metaphor naturally where it helps: "Like going from cruise control to highway autopilot"
 - Celebrate what they're already doing well
-- Be specific in recommendations — "Set up a shared CLAUDE.md for your team" not "Improve AI adoption"
+- Be specific in recommendations - "Set up a shared CLAUDE.md for your team" not "Improve AI adoption"
 
 $ARGUMENTS
