@@ -1,0 +1,10 @@
+{
+  "name": "team-assessment",
+  "description": "Assess your product team's AI autonomy maturity across 6 dimensions with calibrated examples, generate a structured report and visual radar chart.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Bayram Annakov",
+    "email": "bayram@onsa.ai"
+  },
+  "keywords": ["product-management", "team-assessment", "ai-maturity", "autonomy", "radar-chart"]
+}

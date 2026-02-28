@@ -1,0 +1,13 @@
+{
+  "name": "ai-native-product-skills",
+  "owner": {
+    "name": "Bayram Annakov"
+  },
+  "plugins": [
+    {
+      "name": "team-assessment",
+      "source": "./",
+      "description": "Assess your product team's AI autonomy maturity across 6 dimensions. Generates team-assessment.md and radar-chart.svg."
+    }
+  ]
+}

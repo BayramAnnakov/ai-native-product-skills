@@ -1,6 +1,6 @@
 # AI-Native Product Team Skills
 
-Reusable [Claude Code](https://claude.ai/claude-code) skills for the AI-Native Product Team course.
+Reusable [Claude Code](https://claude.ai/claude-code) skills for the AI-Native Product Team course. Installable as a Claude Code plugin marketplace.
 
 ## Available Skills
 
@@ -17,20 +17,20 @@ Interviews you about your product team's AI maturity across 6 dimensions, genera
 
 ## Installation
 
-### Option 1: One command (recommended)
+### Option 1: Plugin marketplace (recommended)
+
+In Claude Code:
+```
+/plugin marketplace add BayramAnnakov/ai-native-product-skills
+/plugin install team-assessment@ai-native-product-skills
+```
+
+### Option 2: Manual install (one command)
 
 ```bash
 cd ~/team-ai-workspace
 mkdir -p .claude/commands
-curl -o .claude/commands/team-assess.md https://raw.githubusercontent.com/BayramAnnakov/ai-native-product-skills/main/commands/team-assess.md
-```
-
-### Option 2: Clone the whole repo
-
-```bash
-cd ~/team-ai-workspace
-git clone https://github.com/BayramAnnakov/ai-native-product-skills.git .claude/skills-repo
-cp .claude/skills-repo/commands/*.md .claude/commands/
+curl -o .claude/commands/team-assess.md https://raw.githubusercontent.com/BayramAnnakov/ai-native-product-skills/main/skills/team-assess/SKILL.md
 ```
 
 ## Usage

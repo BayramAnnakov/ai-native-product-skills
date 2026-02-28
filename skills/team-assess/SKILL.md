@@ -1,4 +1,5 @@
 ---
+name: team-assess
 description: Assess your product team's AI autonomy maturity across 6 dimensions with calibrated examples and generate a visual radar chart
 ---
 
