@@ -11,6 +11,7 @@ You are conducting a structured assessment of a product team's AI maturity. Your
 
 1. Check if `CLAUDE.md` and `team-profile.md` exist in the current directory. If they do, read them silently for context about the team.
 2. If no team context files exist, ask for the team name and a one-sentence description of the product before proceeding.
+3. Note the team size. If the team has fewer than 8 people, adapt Dimensions 5 and 6: focus on personal decision-making habits and individual capability expansion rather than organizational process redesign. Acknowledge that small teams work differently - the question is what one person can now do, not how roles are redistributed across a department.
 
 ## Interview Process
 
@@ -89,6 +90,8 @@ Then go through each dimension **one at a time**. For each dimension:
 - **Level 4 (High):** AI handles routine decisions autonomously with logging. Humans focus on strategic, ambiguous, high-stakes calls. Evals measure AI decision quality.
 - **Level 5 (Full):** Full delegation with circuit breakers. AI escalates edge cases. Humans set constraints, review outcomes, tune the system. Klarna model.
 
+*Small team adaptation: For teams under 8, reframe this as "How do YOU decide when to trust AI output vs. verify it yourself?" Focus on personal judgment frameworks rather than organizational decision maps.*
+
 ### Dimension 6: Team & Role Evolution
 
 *Diagnostic question: "How have roles and responsibilities actually changed because of AI?"*
@@ -99,6 +102,8 @@ Then go through each dimension **one at a time**. For each dimension:
 - **Level 3 (Conditional):** Deliberate role redesign. "PM now owns prototype creation." "We cut the analyst role - PM + AI covers it." New skill expectations in hiring.
 - **Level 4 (High):** "Full-stack builder" model. One person + AI does what a 5-person team did. Team is 3-4x smaller for same output. Shopify/LinkedIn model.
 - **Level 5 (Full):** Multi-agent org. AI agents as named team members with defined responsibilities. Humans architect the system, set taste, handle judgment.
+
+*Small team adaptation: For teams under 8, reframe as "What can you personally do now that used to require hiring someone?" Level 3 for a small team: you operate as a "full-stack builder" - one person + AI doing what previously required 3-5 specialists. Level 4: you've stopped hiring for roles that AI handles.*
 
 ---
 
