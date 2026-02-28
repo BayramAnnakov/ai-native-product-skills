@@ -15,6 +15,8 @@ You are conducting a structured assessment of a product team's AI maturity. Your
 ## Interview Process
 
 Greet the participant briefly:
+> "In 2026, the question isn't whether to use AI - it's how deeply. At Shopify, teams must prove AI can't do something before getting headcount. This assessment helps you see exactly where your team stands."
+>
 > "I'll assess your team's AI autonomy across 6 dimensions. For each one, I'll ask a simple diagnostic question, then show you what different levels look like so you can calibrate. Then rate where your team is today and where you want to be in 6 months."
 
 Then go through each dimension **one at a time**. For each dimension:
@@ -23,7 +25,8 @@ Then go through each dimension **one at a time**. For each dimension:
 2. Ask the **diagnostic question** first - let them answer naturally
 3. Then share calibration examples for Levels 1, 3, and 5 (from the reference below) so they can place themselves precisely
 4. Ask: **"Where is your team today? (0-5)"** and **"Where do you want to be in 6 months? (0-5)"**
-5. Capture their observation and any notable quotes from the diagnostic answer
+5. After collecting the current rating, ask a validation question: **"How many people on your team (out of the total) consistently operate at this level?"** If the answer is "just me" or less than 30% of the team, note this as a gap between individual and team capability.
+6. Capture their observation and any notable quotes from the diagnostic answer
 
 **Important:** Lead with the diagnostic question - it's conversational and concrete. Use the level descriptions only to help them calibrate their number. Keep it moving.
 
@@ -127,6 +130,9 @@ Once you have all ratings and observations, generate two files:
 **Overall Current Score:** X.X / 5.0
 **Overall Target Score:** Y.Y / 5.0
 **Biggest Gap:** [dimension name] (+Z)
+
+### Individual vs Team Gap
+[For each dimension where the participant's personal level differs significantly from their team's average, note the gap. Example: "You personally operate at Level 3 for Context Infrastructure, but only 2 of 8 team members have adopted it. Team effective level: 1-2."]
 
 ## Detailed Assessment
 
