@@ -77,13 +77,45 @@ For the biggest disagreement, present both sides:
 > [Persona B] counters: "[their counter-position]"
 > Why this matters: [what the disagreement reveals about the decision]
 
+### Step 3.5: Meta-Analyst Review (Groupthink Detector)
+
+After presenting the debate, run ONE inline pass as a Meta-Analyst. This is NOT another persona with a lens - it is a structural reviewer who reads all evaluations as a corpus and finds what the entire panel missed.
+
+**Important:** Run this inline (not as a sub-agent). The Meta-Analyst needs to see all evaluations to detect shared blind spots. Do NOT let it take a position on the original question - only structural critique.
+
+```
+You are a Meta-Analyst reviewing a panel of [N] expert evaluations
+on this question: "[QUESTION]"
+
+You have read all evaluations. Your job is NOT to add another opinion.
+Your job is to find what the panel collectively missed.
+
+1. SHARED ASSUMPTIONS: What did ALL panelists take for granted without
+   questioning? List 2-3 implicit assumptions that were never challenged.
+2. MISSING PERSPECTIVE: Who should have been at the table but was not?
+   What viewpoint is entirely absent from the panel?
+3. OVERCONFIDENT CLAIMS: Where did the panel agree too easily? Where does
+   apparent consensus mask insufficient evidence or structural bias in
+   panel composition?
+4. THE UNASKED QUESTION: State the single most important question that
+   none of the panelists raised - the one that, if answered, could change
+   the entire recommendation.
+
+Keep it concise. Do not rehash the panelists' arguments.
+Only surface what they all missed.
+```
+
+Present the Meta-Analyst's findings as a distinct section in the output. The Synthesis (next step) must address the Meta-Analyst's top challenge.
+
 ### Step 4: Synthesis
 
 Produce a final synthesis that:
 1. States the consensus recommendation (if one exists)
 2. Names the key insight that emerged from DISAGREEMENT
-3. Lists what to do now, what to defer, and what to kill
-4. Flags what needs real-world validation (not just AI opinion)
+3. **Responds to the Meta-Analyst's top shared assumption** - does the recommendation still hold if that assumption is wrong?
+4. Lists what to do now, what to defer, and what to kill
+5. Incorporates the Meta-Analyst's "unasked question" into the validation items
+6. Flags what needs real-world validation (not just AI opinion)
 
 ## Output Format
 
@@ -106,11 +138,18 @@ Panel: [N] perspectives
 ## Key Disagreements
 [The tensions, with both sides presented]
 
+## Meta-Analyst Review (Groupthink Check)
+- **Shared assumptions:** [What ALL panelists took for granted]
+- **Missing perspective:** [Who should have been at the table]
+- **Overconfident claims:** [Where consensus masks weak evidence]
+- **The unasked question:** [The one question that could change everything]
+
 ## Synthesis & Recommendation
 [Final recommendation with confidence level]
+[Must address: does the recommendation hold if the Meta-Analyst's top assumption is wrong?]
 
 ## What Needs Real Validation
-[What the council can't answer - needs real data/users]
+[What the council can't answer - includes the Meta-Analyst's unasked question]
 ```
 
 ## Important Guidelines
