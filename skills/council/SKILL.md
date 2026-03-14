@@ -13,13 +13,16 @@ The user provides a question or topic via `$ARGUMENTS`. You simulate a council o
 
 ## Before Starting
 
-1. Read CLAUDE.md and any .claude/rules/ files for product/team context
-2. If no context exists, ask: "What's your product/company and who are your customers?" (one question only)
+1. Read CLAUDE.md and any .claude/rules/ files for product/team context. **Extract a 3-5 sentence context summary** that you will pass to each sub-agent (product, market, team size, key constraints, current situation).
+2. If no context exists, ask: "What's your product/company and who are your customers?" (one question only). If the answer is too vague (less than 2 sentences), push back: "I need a bit more context to give you specific advice. What market are you in and what's the key decision you're facing?"
 3. Determine the question type to select appropriate personas:
    - **Strategic decision** → Business strategist, Customer advocate, Devil's advocate
    - **Competitive analysis** → Market analyst, Customer researcher, Contrarian
    - **Feature prioritization** → User advocate, Technical feasibility, Business impact
    - **Go-to-market** → Growth expert, Positioning specialist, Target buyer persona
+   - **Build vs buy / Technology** → Pragmatic engineer, Business case analyst, Risk assessor
+   - **Hiring / Team** → People leader, Finance lens, Culture advocate
+   - **Pricing / Monetization** → Revenue strategist, Customer willingness advocate, Competitor analyst
    - **General** → Optimist, Pessimist, Pragmatist
 
 ## The Council Process
@@ -37,26 +40,29 @@ Present the panel to the user:
 
 ### Step 2: Independent Evaluations
 
-Run each persona as a **separate sub-agent** for truly independent perspectives.
+**Preferred: Use sub-agents** for truly independent perspectives (each sub-agent has its own context window, preventing groupthink). Spawn them in parallel when possible.
 
-For each persona, spawn a sub-agent with this instruction:
+**Fallback: If sub-agents are unavailable** (Desktop app, token limits, or user preference), generate each evaluation independently by completing one fully before starting the next. Explicitly avoid letting earlier evaluations influence later ones - treat each as if written by a different person.
+
+For each persona, use this evaluation prompt (either as sub-agent instruction or as your own generation frame):
 ```
 You are [PERSONA NAME], evaluating this question: "[USER'S QUESTION]"
 
-Context about the product/team: [FROM CLAUDE.md]
+Context about the product/team:
+[PASTE THE 3-5 SENTENCE CONTEXT SUMMARY FROM STEP 0]
 
 Your lens: [THEIR LENS]
 Your known bias: [THEIR BIAS]
 
 Provide your independent evaluation:
-1. Your verdict (1-2 sentences, take a clear position)
-2. Your reasoning (3-5 bullet points)
-3. What everyone else will miss (your unique perspective)
-4. The biggest risk if they follow your advice
-5. Rate: [relevant scale, e.g., Build/Don't Build, or 1-10]
+1. Your verdict (1-2 sentences, take a clear position - no hedging)
+2. Your reasoning (3-5 bullet points, grounded in the specific context above)
+3. What everyone else will miss (your unique angle that others won't see)
+4. The biggest risk if they follow YOUR advice (intellectual honesty)
+5. Rate: [relevant scale, e.g., Build/Don't Build, 1-10, or Go/No-Go]
 ```
 
-Collect all evaluations before proceeding.
+Collect all evaluations before proceeding to the debate.
 
 ### Step 3: The Debate
 
@@ -116,9 +122,18 @@ Panel: [N] perspectives
 - **Flag uncertainty:** When the council disagrees 50/50, say so. Don't fake consensus.
 - **Real names as archetypes:** "April Dunford-style positioning expert" signals the lens clearly, while being transparent that it's a simulation
 
+## Model & Cost Notes
+
+- With sub-agents: each persona uses its own context window. 3 personas = ~3x token cost of a single conversation.
+- Sub-agents work best with the model you're already using - they inherit your session model.
+- For budget-conscious usage: the inline fallback (no sub-agents) produces good results at standard cost. Sub-agents add independence at the cost of tokens.
+- Typical council run: 3-5 minutes with sub-agents, 1-2 minutes inline.
+
 ## Example Invocations
 
 - `/council Should we build feature X or feature Y for Q2?`
 - `/council What's the best go-to-market strategy for our new product?`
 - `/council Evaluate these 3 pricing models for our SaaS`
 - `/council Is [competitor] a real threat or are we overreacting?`
+- `/council Should we hire a data analyst or invest in AI analytics tools?`
+- `/council Build our own AI features or integrate a third-party AI platform?`
