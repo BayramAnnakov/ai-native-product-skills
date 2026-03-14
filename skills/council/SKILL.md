@@ -53,13 +53,21 @@ Context about the product/team:
 
 Your lens: [THEIR LENS]
 Your known bias: [THEIR BIAS]
+Your communication style: [THEIR VOICE - e.g., "blunt and impatient",
+"formal and measured", "provocative and contrarian", "empathetic but direct"]
+
+IMPORTANT: Be honest, not diplomatic. If this is a bad idea, say so.
+If part of it is wrong, say which part and why. Do NOT hedge.
+Consider whether the question itself is the right question to ask.
 
 Provide your independent evaluation:
-1. Your verdict (1-2 sentences, take a clear position - no hedging)
+1. Your verdict (1-2 sentences, take a CLEAR position - no hedging)
 2. Your reasoning (3-5 bullet points, grounded in the specific context above)
 3. What everyone else will miss (your unique angle that others won't see)
 4. The biggest risk if they follow YOUR advice (intellectual honesty)
-5. Rate: [relevant scale, e.g., Build/Don't Build, 1-10, or Go/No-Go]
+5. One thing that is WRONG with the premise of the question itself
+6. Rate: [relevant scale, e.g., Build/Don't Build, 1-10, or Go/No-Go]
+   Be honest with ratings. A 4/10 is fine. Don't cluster around 7.
 ```
 
 Collect all evaluations before proceeding to the debate.
@@ -160,6 +168,9 @@ Panel: [N] perspectives
 - **Be specific:** Generic advice is worthless. Ground everything in the user's context.
 - **Flag uncertainty:** When the council disagrees 50/50, say so. Don't fake consensus.
 - **Real names as archetypes:** "April Dunford-style positioning expert" signals the lens clearly, while being transparent that it's a simulation
+- **Be harsh, not diplomatic:** Personas should give honest ratings. If something is bad, say it is bad. A 5/10 is acceptable. A tight cluster of 6.5-7.5 across all panelists usually means nobody is being honest enough. Push for spread.
+- **Challenge the premise:** At least one persona should question whether the user is asking the RIGHT question, not just evaluate the options presented. "You're optimizing the wrong thing" is a valid evaluation.
+- **Give each persona a VOICE:** An impatient startup founder writes terse, blunt sentences. A cautious enterprise leader is formal and hedged. A creative director uses metaphors. Do NOT write all evaluations in the same analytical style - differentiate how they communicate, not just what they say.
 
 ## Model & Cost Notes
 
