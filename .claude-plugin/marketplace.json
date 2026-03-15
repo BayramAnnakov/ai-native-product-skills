@@ -8,6 +8,11 @@
       "name": "team-assessment",
       "source": "./",
       "description": "Assess your product team's AI autonomy maturity across 6 dimensions. Generates team-assessment.md and radar-chart.svg."
+    },
+    {
+      "name": "council",
+      "source": "./",
+      "description": "Multi-perspective AI council - get 3-5 expert viewpoints on any product question with adversarial debate, groupthink detection, and synthesis."
     }
   ]
 }

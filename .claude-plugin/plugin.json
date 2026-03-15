@@ -1,10 +1,10 @@
 {
-  "name": "team-assessment",
-  "description": "Assess your product team's AI autonomy maturity across 6 dimensions with calibrated examples, generate a structured report and visual radar chart.",
-  "version": "1.0.0",
+  "name": "ai-native-product-skills",
+  "description": "Skills for AI-native product teams: team autonomy assessment (/team-assess) and multi-perspective AI council (/council).",
+  "version": "2.0.0",
   "author": {
     "name": "Bayram Annakov",
     "email": "bayram@onsa.ai"
   },
-  "keywords": ["product-management", "team-assessment", "ai-maturity", "autonomy", "radar-chart"]
+  "keywords": ["product-management", "team-assessment", "ai-maturity", "council", "multi-perspective", "skills"]
 }
