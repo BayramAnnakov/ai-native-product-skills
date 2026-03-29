@@ -127,7 +127,6 @@ RULES:
 Read the evaluation criteria: .claude/rules/prototyping.md
 Read any available context: CLAUDE.md (if exists)
 Read the prototype: prototypes/[name]/
-[If round 2+] Read previous evaluation: evaluation-round-[N-1].md
 
 EVALUATION PROCESS:
 
@@ -156,7 +155,6 @@ EVALUATION PROCESS:
 4. SYNTHESIS:
    Save evaluation-round-N.md with:
    - Scores table
-   - [If round 2+] Comparison to previous round
    - Browser verification results
    - Top 2 highest-impact improvements
    - Verdict: PASS (average >= 7, no criterion below 5) or FAIL
@@ -167,6 +165,9 @@ EVALUATION PROCESS:
 - The Generator's reasoning, planning, or spec
 - Changelogs or iteration notes
 - Any justification for design choices
+- **Previous evaluation scores or feedback** (prevents anchoring bias - each round is a fresh, independent assessment)
+
+**Why no previous evaluations:** Anthropic's research calibrates evaluators against fixed criteria and few-shot examples, not against their own prior scores. Passing previous scores creates anchoring bias - the Evaluator adjusts incrementally around its last score instead of judging the prototype fresh. The Orchestrator (you) is the one who compares scores across rounds and tracks improvement.
 
 **Why this separation matters:** Anthropic's research (March 2026): "When asked to evaluate their own work, agents confidently praise it - even when quality is obviously mediocre." Sub-agent isolation prevents this.
 
@@ -176,13 +177,21 @@ Repeat Phases 2-3. You (Orchestrator) manage the handoff:
 
 ```
 Round N:
-  1. Read evaluation-round-(N-1).md
-  2. Spawn Generator sub-agent with: spec + feedback + context
+  1. Read evaluation-round-(N-1).md yourself (Orchestrator)
+  2. Spawn Generator sub-agent with: spec + evaluation feedback + context
   3. Generator produces updated prototype + changelog
-  4. Spawn Evaluator sub-agent with: prototype + criteria + previous scores
+  4. Spawn Evaluator sub-agent with: prototype + criteria + CLAUDE.md ONLY
+     (NO previous evaluations - fresh eyes every round)
   5. Evaluator produces evaluation-round-N.md
-  6. Check verdict: PASS → finalize. FAIL → round N+1.
+  6. YOU compare scores across rounds and check for improvement/regression
+  7. Check verdict: PASS → finalize. FAIL → round N+1.
 ```
+
+**Score tracking is YOUR job as Orchestrator.** After each Evaluator round, you:
+- Compare this round's scores to previous rounds
+- Note which criteria improved, regressed, or stalled
+- Decide whether the Generator's changes actually helped
+- Feed only the CURRENT evaluation's feedback to the next Generator round
 
 **Loop rules:**
 - Minimum 3 rounds (creative enhancements in round 3 often produce the best leap)
