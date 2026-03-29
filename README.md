@@ -32,6 +32,28 @@ Get 3-5 expert viewpoints on any product question, with adversarial debate and s
 - `/council Evaluate these 3 pricing models for our SaaS`
 - `/council Is [competitor] a real threat or are we overreacting?`
 
+### `/prototype` - Autonomous Prototype Builder
+
+Build any kind of working interactive prototype, then autonomously improve it using the Generator-Evaluator loop. Based on Anthropic's harness architecture (March 2026).
+
+**What it does:**
+- Calibrates evaluation criteria based on prototype type (dashboard, flow, page, tool - suggests domain-specific criteria, you confirm)
+- Plans a prototype spec from available context (CLAUDE.md, competitive analysis, brand guidelines - works with minimal context too)
+- Spawns a **Generator sub-agent** to build a multi-file interactive prototype
+- Spawns an **Evaluator sub-agent** to independently critique it with browser automation
+- Loops: Generator improves based on Evaluator feedback, Evaluator re-scores
+- Runs 3-5 rounds autonomously until quality threshold is met
+- Produces: working prototype, improvement-log.md, product-passport.md
+
+**Three-agent architecture** (Orchestrator + Generator + Evaluator) ensures the Evaluator is genuinely independent - separate context window, no access to the Generator's reasoning.
+
+**Example invocations:**
+- `/prototype Landing page for our B2B sales tool`
+- `/prototype Admin dashboard showing real-time pipeline metrics`
+- `/prototype Onboarding flow for first-time users`
+- `/prototype Settings page with team management and billing`
+- `/prototype Data visualization of monthly revenue trends`
+
 ## Installation
 
 ### Option 1: Plugin marketplace (recommended)
@@ -53,6 +75,9 @@ curl -o .claude/commands/team-assess.md https://raw.githubusercontent.com/Bayram
 
 # Council
 curl -o .claude/commands/council.md https://raw.githubusercontent.com/BayramAnnakov/ai-native-product-skills/main/skills/council/SKILL.md
+
+# Prototype
+curl -o .claude/commands/prototype.md https://raw.githubusercontent.com/BayramAnnakov/ai-native-product-skills/main/skills/prototype/SKILL.md
 ```
 
 ## Usage
