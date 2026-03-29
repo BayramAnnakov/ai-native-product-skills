@@ -13,6 +13,11 @@
       "name": "council",
       "source": "./",
       "description": "Multi-perspective AI council - get 3-5 expert viewpoints on any product question with adversarial debate, groupthink detection, and synthesis."
+    },
+    {
+      "name": "prototype",
+      "source": "./",
+      "description": "Autonomous prototype builder using the Generator-Evaluator Loop - generate, evaluate, and improve prototypes iteratively."
     }
   ]
 }
