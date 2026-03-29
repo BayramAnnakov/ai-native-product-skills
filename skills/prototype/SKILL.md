@@ -87,6 +87,10 @@ Read: prototype-spec.md and any context files provided.
 [If round 2+] Read the evaluator feedback and implement the top 2 fixes.
 [If round 2+] Also make ONE creative enhancement the evaluator didn't ask for.
 
+IMPORTANT: If the /frontend-design skill is available, use it.
+It produces distinctive, non-generic visual design and avoids
+the default template look that kills Visual Identity scores.
+
 Build as a multi-file project:
 - index.html (main structure)
 - styles.css (distinct visual identity, NOT generic defaults)
