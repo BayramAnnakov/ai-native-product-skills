@@ -24,11 +24,11 @@ Architecture (from Anthropic's harness design, March 2026):
 
 1. Read CLAUDE.md if it exists - use any product/project context available.
 2. Scan the workspace for relevant context files: competitive-analysis.md, design specs, brand guidelines, user research, existing prototypes. Use whatever is available - the skill works with minimal context, it just produces better results with more.
-3. Check for `.claude/rules/prototyping.md` - if it exists, use those evaluation criteria. If not, run Phase 0 to calibrate.
+3. Check for `prototyping-criteria.md` - if it exists, use those evaluation criteria. If not, run Phase 0 to calibrate.
 
 ## Phase 0: CALIBRATE EVALUATION CRITERIA
 
-If `.claude/rules/prototyping.md` does not exist, run this calibration step.
+If `prototyping-criteria.md` does not exist, run this calibration step.
 
 ### Step 1: Infer prototype type and suggest criteria
 
@@ -57,7 +57,7 @@ Analyze what the user wants to build. Different prototypes need different criter
 Present the suggested criteria and ask:
 > "Here are the evaluation criteria I'll use. Want to adjust, add, or remove any?"
 
-Accept one round of edits, then save to `.claude/rules/prototyping.md`.
+Accept one round of edits, then save to `prototyping-criteria.md`.
 
 ## Phase 1: PLAN
 
@@ -128,7 +128,7 @@ RULES:
 - Feedback must be actionable: say WHAT to fix and WHERE.
 - Do not praise effort. Judge the output only.
 
-Read the evaluation criteria: .claude/rules/prototyping.md
+Read the evaluation criteria: prototyping-criteria.md
 Read any available context: CLAUDE.md (if exists)
 Read the prototype: prototypes/[name]/
 
