@@ -54,6 +54,37 @@ Build any kind of working interactive prototype, then autonomously improve it us
 - `/prototype Settings page with team management and billing`
 - `/prototype Data visualization of monthly revenue trends`
 
+### `/autoresearch` - Autoresearch Loop for Any Work
+
+Apply Karpathy's [autoresearch](https://github.com/karpathy/autoresearch) loop (goal + mechanical fitness + mutable surface + keep-or-revert iteration) to ANY measurable workflow - code, content, sales, research, design, operations. Not just ML or software. Includes a pre-loop triage that refuses fat-tailed, reflexive, or slow-feedback problems without adapting the mode.
+
+**What it does:**
+- **Stage 1: Intake** - captures goal, candidate metric, mutable surface, guard metrics, budget
+- **Stage 2: Triage** - scores the candidate across 5 dimensions (feedback latency, metric mechanicality, tail shape, sample size, surface locality) and refuses ill-shaped problems with alternatives
+- **Stage 3: Fitness design** - enforces 6 hard requirements (callable command, fixed corpus, baseline, significance threshold, sanity check, guard metrics)
+- **Stage 4: Mode selection** - picks one of five modes based on domain
+- **Stage 5: Loop + post-mortem** - scaffolds `goal.md`, runs the keep-or-revert loop, diagnoses plateau causes if reached
+
+**Five modes for different domains:**
+- **Pure optimizer** - thin-tailed, fast-feedback, clean metric (code, ML, compression, SQL tuning)
+- **Barbell** - 85% proven baseline + 15% wild experiments (fat-tailed, reflexive: B2B sales, content, design)
+- **Via negativa** - "what to kill" not "what to add" (fragile, over-engineered systems)
+- **Inverted** - optimize rejection of bad, not selection of good (imbalanced classes like lead qualification)
+- **Human-in-loop** - agent proposes, human decides (slow feedback, irreversible actions)
+
+**Refusing is a feature.** When a candidate isn't autoresearch-shaped, the skill explains why and offers alternatives (different mode, smaller sub-problem, use `/council` for architecture questions). The plateau diagnosis IS the deliverable when the loop doesn't improve - the skill names which of the five failure modes applies: wrong search space, wrong metric, broken measurement, genuine local optimum, or out of budget.
+
+**Encodes hard-won lessons** from running autoresearch on real B2B workflows (ICP scoring, content, sales) and Taleb's critiques of optimization in fat-tailed domains. Anti-patterns are first-class: astrology-with-a-JSON-schema metrics, training-a-better-turkey stationarity violations, green lumber fallacy, A/B-testing-the-wrong-door, sample size theater, and more.
+
+**Example invocations:**
+- `/autoresearch Can I apply this to our landing page conversion?`
+- `/autoresearch Optimize my ICP lead scorer - plateaued at 0.15 F1`
+- `/autoresearch Set up an overnight loop for our extraction pipeline accuracy`
+- `/autoresearch Reduce bundle size on our React app`
+- `/autoresearch I have a fitness function and a budget - just start the loop`
+
+**Structure:** Unlike the other skills in this plugin, `/autoresearch` is multi-file - `SKILL.md` is the entry point (5-stage flow), and deeper reference files (`triage-checklist.md`, `fitness-design.md`, `modes.md`, `anti-patterns.md`) are loaded progressively as the loop advances. A `templates/goal.md` scaffold is created in the user's working directory.
+
 ## Installation
 
 ### Option 1: Plugin marketplace (recommended)
@@ -78,6 +109,16 @@ curl -o .claude/commands/council.md https://raw.githubusercontent.com/BayramAnna
 
 # Prototype
 curl -o .claude/commands/prototype.md https://raw.githubusercontent.com/BayramAnnakov/ai-native-product-skills/main/skills/prototype/SKILL.md
+```
+
+For `/autoresearch` (multi-file skill with references/ and templates/), use git clone instead:
+
+```bash
+cd ~/.claude/skills
+git clone --depth 1 --filter=blob:none --sparse https://github.com/BayramAnnakov/ai-native-product-skills autoresearch-src
+cd autoresearch-src && git sparse-checkout set skills/autoresearch
+cp -r skills/autoresearch ~/.claude/skills/autoresearch
+cd .. && rm -rf autoresearch-src
 ```
 
 ## Usage
