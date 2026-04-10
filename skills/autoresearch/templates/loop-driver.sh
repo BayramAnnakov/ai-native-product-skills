@@ -67,20 +67,30 @@ while [ "$ITER" -lt "$MAX_ITER" ]; do
     # Substitute iteration variables into the prompt template
     PROMPT=$(sed "s/{{ITER}}/$ITER/g; s/{{MAX_ITER}}/$MAX_ITER/g" "$PROMPT_FILE")
 
+    # Record journal state BEFORE iteration to detect completion
+    # (claude -p exits 0 even on budget exhaustion, so we can't rely on exit code)
+    BEFORE_LINES=$(wc -l < experiments/journal.md 2>/dev/null || echo 0)
+
     # Run one iteration: Claude reads state, proposes ONE atomic change,
     # commits, runs fitness, keeps or reverts, appends to journal.
+    # bypassPermissions is required for true autonomy (acceptEdits still blocks on Bash).
     claude -p \
-        --permission-mode acceptEdits \
+        --permission-mode bypassPermissions \
         --max-budget-usd "$MAX_BUDGET_USD" \
         --output-format text \
-        "$PROMPT" || {
-            echo "experiments/STOP: claude -p exited non-zero (budget exhausted or error)" > experiments/STOP
-            break
-        }
+        "$PROMPT" || true  # we detect success by journal growth, not exit code
 
     # STOP signal check (guard violation, plateau declared by Claude, manual stop)
     if [ -f "experiments/STOP" ]; then
         echo "STOP signal: $(cat experiments/STOP)"
+        break
+    fi
+
+    # Iteration completion check: journal.md must have grown by at least one line
+    AFTER_LINES=$(wc -l < experiments/journal.md 2>/dev/null || echo 0)
+    if [ "$AFTER_LINES" -le "$BEFORE_LINES" ]; then
+        echo "iteration $ITER did not update journal.md - budget exhausted, error, or agent failure" > experiments/STOP
+        echo "STOP: $(cat experiments/STOP)"
         break
     fi
 
