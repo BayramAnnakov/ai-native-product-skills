@@ -52,6 +52,7 @@ command -v claude >/dev/null || { echo "ERROR: claude CLI not found in PATH." >&
 
 mkdir -p experiments
 rm -f experiments/STOP  # clear any stale stop signal
+touch experiments/journal.md  # ensure journal exists for wc -l
 
 ITER=0
 PLATEAU_COUNT=0
