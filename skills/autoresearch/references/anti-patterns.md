@@ -111,6 +111,21 @@ Starting the loop before Stage 3 is complete. The fitness function is half-built
 
 **Fix:** Refuse. Kindly. Every minute spent on fitness design before the loop saves hours of chasing noise during the loop. This is the single highest-leverage discipline in autoresearch.
 
+## 13. Timid tweaks on a plateau
+
+Not "more iterations" - that part is fine. The problem is running 500 more 1-character prompt tweaks hoping one of them breaks the plateau. Tiny-scope experiments on a flat surface overfit to noise and burn budget producing nothing.
+
+**Smell:** Last 10-20 iterations all produced deltas smaller than the significance threshold. Each new experiment is a 1-2 word tweak to the same spot. The journal reads like background noise.
+
+**Fix:** Karpathy's exact prescription when stuck, quoted verbatim from `program.md`:
+> *"If you run out of ideas, think harder - read papers referenced in the code, re-read the in-scope files for new angles, try combining previous near-misses, try more radical architectural changes."*
+
+Escalate the AMBITION of changes, not the iteration count. The loop keeps running; what changes is the boldness of each experiment. If radical changes also plateau, then change the mutable surface entirely. The loop runs until the human interrupts or the hard cap fires - but every iteration should be trying a genuinely different idea, not a cosmetic edit.
+
+**Worth emphasizing because people get it backwards:** the simplicity criterion (keep deletions even at zero fitness gain) is NOT "make small, timid changes." It is "when weighing complexity against fitness, simplifications are always keepers." Bold, radical experiments are still welcome - they just need to justify their complexity cost with a matching fitness gain.
+
+**Attribution:** Karpathy's `program.md` NEVER STOP rule + simplicity criterion, plus the plateau council's "prompt text search is exhausted" observation (all panelists flagged this within ~15 iterations of the ICP scorer run).
+
 ---
 
 ## How to use this file

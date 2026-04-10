@@ -83,7 +83,18 @@ Apply Karpathy's [autoresearch](https://github.com/karpathy/autoresearch) loop (
 - `/autoresearch Reduce bundle size on our React app`
 - `/autoresearch I have a fitness function and a budget - just start the loop`
 
-**Structure:** Unlike the other skills in this plugin, `/autoresearch` is multi-file - `SKILL.md` is the entry point (5-stage flow), and deeper reference files (`triage-checklist.md`, `fitness-design.md`, `modes.md`, `anti-patterns.md`) are loaded progressively as the loop advances. A `templates/goal.md` scaffold is created in the user's working directory.
+**Simplicity principles (Karpathy, verbatim from `program.md`) baked in:**
+- One atomic change per iteration - not five, not "a batch of related tweaks"
+- Small mutable surface (Karpathy's original had ONE mutable file, `train.py`)
+- Simple fitness function - one command, one number, fixed corpus
+- Simple loop driver - ~80 lines of bash, not a framework
+- **Simplicity criterion** (quoted): "A small improvement that adds ugly complexity is not worth it. Conversely, removing something and getting equal or better results is a great outcome - that's a simplification win." Deletions are always keepers, even at zero fitness gain.
+- **When stuck, escalate ambition, not iteration count** (Karpathy, quoted): "think harder - read papers referenced in the code, re-read the in-scope files for new angles, try combining previous near-misses, try more radical architectural changes"
+- **Hard iteration cap** (default 50) + dollar budget + plateau detection + guard violations. Within the cap, the loop runs AUTONOMOUSLY - never pausing to ask "should I continue?" (Karpathy's "NEVER STOP" rule). The cap terminates the loop; nothing else does, except a manual interrupt.
+
+**Autonomous driver included.** `templates/loop-driver.sh` is an ~80-line bash wrapper around `claude -p` (non-interactive print mode) that runs iterations unattended until any termination signal fires. Uses `--permission-mode acceptEdits`, `--max-budget-usd` for dollar cap, and file-based STOP signals. Claude Code hooks (`Stop`, `PostToolUse`, etc.) cannot drive autonomous loops - they react, they do not inject new prompts. External orchestration via `claude -p` is the correct pattern.
+
+**Structure:** Unlike the other skills in this plugin, `/autoresearch` is multi-file - `SKILL.md` is the entry point (5-stage flow + simplicity principles), deeper reference files (`triage-checklist.md`, `fitness-design.md`, `modes.md`, `anti-patterns.md` with 13 patterns) are loaded progressively, and `templates/` contains `goal.md`, `loop-driver.sh`, and `iteration-prompt.md` scaffolds copied to the user's working directory in Stage 5.
 
 ## Installation
 

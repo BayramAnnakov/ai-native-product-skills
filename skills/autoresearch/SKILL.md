@@ -24,6 +24,38 @@ Do NOT invoke for:
 - safety-critical / irreversible actions where keep-or-revert cannot be automated
 - architecture or strategy questions (use the council skill instead - "use autoresearch for plumbing, never for architecture")
 
+## Simplicity principles (Karpathy, verbatim)
+
+Baked into every stage. Non-negotiable. Quoted directly from Karpathy's `program.md`:
+
+1. **One atomic change per iteration.** Not five. Not "a batch of related tweaks." One. Revert is trivial; diagnosis is tractable.
+2. **Small mutable surface.** Karpathy's original had exactly ONE file mutable (`train.py`) and one file read-only (`prepare.py`). If your surface is "the whole codebase" or "the whole prompt," the loop cannot converge. Scope down before looping.
+3. **Simple fitness function.** One command. One number. Fixed corpus. Karpathy's was `grep "^val_bpb:" run.log`. If your fitness needs a 200-line harness, your fitness is wrong.
+4. **Simple loop driver.** ~80 lines of bash, or one prompt that "LOOPs FOREVER" in a single session. Not a framework. Not microservices. Karpathy's entire system is `train.py` + `prepare.py` + `results.tsv` + `program.md` - four files.
+5. **The simplicity criterion** (Karpathy's exact rule for keep-or-revert decisions):
+   > *"All else being equal, simpler is better. A small improvement that adds ugly complexity is not worth it. Conversely, removing something and getting equal or better results is a great outcome - that's a simplification win. When evaluating whether to keep a change, weigh the complexity cost against the improvement magnitude. A 0.001 val_bpb improvement that adds 20 lines of hacky code? Probably not worth it. A 0.001 val_bpb improvement from deleting code? Definitely keep. An improvement of ~0 but much simpler code? Keep."*
+
+   Decision table:
+
+   | Fitness delta | Complexity delta | Decision |
+   |---------------|-----------------|----------|
+   | Small improvement | Added ugly code | **Revert** |
+   | Small improvement | Deleted code | **Keep** (simplification win) |
+   | ~0 | Much simpler | **Keep** (deletion alone is valuable) |
+   | Big improvement | Added code | Keep (paid for by the gain) |
+   | Big improvement | Deleted code | Definitely keep |
+
+   This is NOT a rule about change magnitude ("be bold"). It is a rule about the trade-off between complexity cost and fitness benefit. Simplifications always win, even at zero fitness improvement.
+
+6. **When stuck, escalate ambition - not iteration count.** Karpathy: *"If you run out of ideas, think harder - read papers referenced in the code, re-read the in-scope files for new angles, try combining previous near-misses, try more radical architectural changes."* If timid tweaks plateau, the answer is BOLDER changes, not more timid ones. See `references/anti-patterns.md` #13.
+
+7. **Hard iteration cap + autonomous execution.** The loop driver enforces a max iteration count (default 50) and a dollar budget. Within those limits, the loop runs AUTONOMOUSLY - **never pausing to ask permission**. Karpathy, verbatim:
+   > *"Once the experiment loop has begun, do NOT pause to ask the human if you should continue. Do NOT ask 'should I keep going?' or 'is this a good stopping point?'. The human might be asleep. You are autonomous. The loop runs until the human interrupts you, period."*
+
+   The cap is a termination condition, not an "ask the human" event. The loop stops when: cap hit, budget exhausted, plateau detected (10 iterations without significance-threshold improvement), guard violation, or manual interrupt. Nothing else.
+
+These are why Karpathy's `autoresearch.py` is ~630 lines, not 6300. Complexity is the enemy of convergence.
+
 ## Five stages, in order
 
 1. **Intake** - what, how measured, what can change, what can't regress, budget
@@ -110,6 +142,34 @@ Create in the user's working directory (or a subdirectory they pick):
 - The fitness command (script, notebook, evaluator - user's choice, not the skill's)
 - `experiments/` directory for per-iteration logs
 - `baseline.json` with the starting metric value and sanity check results
+- `loop-driver.sh` and `iteration-prompt.md` from `templates/` (for autonomous runs)
+
+### Drive the loop (autonomously)
+
+Claude Code's interactive mode pauses between turns. To run the loop continuously without a human pressing enter each iteration, drive it from OUTSIDE the Claude Code session via a script. Each iteration is one fresh `claude -p` (non-interactive print mode) invocation that reads state from `goal.md` + `experiments/`, proposes one atomic change, runs fitness, commits or reverts, appends to `journal.md`, and exits.
+
+**Three options, in order of simplicity:**
+
+1. **Bash + `claude -p`** (recommended, simplest). Use `templates/loop-driver.sh` and `templates/iteration-prompt.md`. Run:
+   ```bash
+   ./loop-driver.sh --max-iter 50 --max-budget-usd 10
+   ```
+   Uses Claude Code's `-p` / `--print` mode, `--permission-mode acceptEdits` for tool autonomy, `--max-budget-usd` for a built-in dollar cap. State lives in git + files, not session memory. Each iteration is a fresh session reading the journal.
+
+2. **Python + Anthropic SDK** - what Karpathy's original `autoresearch.py` does. Use when you need programmatic state tracking, richer plateau detection, or parallel experiments. More code, more control.
+
+3. **Interactive / manual** - user approves each iteration in a single Claude Code session. OK for N ≤ 5. Tedious above that.
+
+**Hard caps are mandatory.** Every driver MUST enforce:
+- **Max iterations** - default 50, hard cap. Raise only with a written reason in `goal.md`.
+- **Dollar budget** - via `claude -p --max-budget-usd`.
+- **Wall-clock budget** - via `timeout` or driver-level check.
+- **Plateau detection** - default 10 iterations without significance-threshold improvement → stop.
+- **Guard violation** - immediate stop, no retries.
+
+Any trigger writes `experiments/STOP` with a one-line reason and exits. Stage 6 post-mortem reads this file and produces the plateau diagnosis.
+
+**What does NOT work:** Claude Code hooks (`Stop`, `PostToolUse`, `UserPromptSubmit`, `SubagentStop`). Hooks REACT to Claude's actions - they cannot inject new prompts that drive iteration. The loop driver MUST live outside the Claude Code session.
 
 ### Run the loop
 
