@@ -18,6 +18,11 @@
       "name": "prototype",
       "source": "./",
       "description": "Autonomous prototype builder using the Generator-Evaluator Loop - generate, evaluate, and improve prototypes iteratively."
+    },
+    {
+      "name": "autoresearch",
+      "source": "./",
+      "description": "Apply Karpathy's autoresearch loop (goal + mechanical fitness + mutable surface + keep-or-revert iteration) to ANY measurable workflow - code, content, sales, research, design, operations. Includes a pre-loop triage that refuses fat-tailed, reflexive, or slow-feedback problems without adapting the mode, and five modes (pure, barbell, via negativa, inverted, human-in-loop)."
     }
   ]
 }
