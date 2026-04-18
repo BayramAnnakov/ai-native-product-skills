@@ -53,15 +53,18 @@ Run the exact command from `goal.md` (the one you recorded in Stage 3). Parse it
 Mechanical decision based on fitness + a complexity weighting:
 
 - **Guard failure** → always **revert**, even if the primary metric improved dramatically. Guards are non-negotiable.
+- **Guard improvement at zero fitness cost** (e.g. compliance 62% → 86% with fitness in noise) → **Keep**. Making the prompt functional is a simplification-adjacent win even when the primary metric doesn't move.
+- **Single-run keep confirmation:** if your decision to keep is based on a single-run |delta| > the single-run-accept threshold (e.g. 0.025), run the fitness ONE more time at the new HEAD before advancing the baseline. If the second run's delta vs the previous HEAD is under significance, the first run was a lucky draw - revert and investigate. This adds one run per keep; it's cheap insurance against stochastic-evaluator false positives.
 - Otherwise, apply Karpathy's verbatim rule from `program.md`:
 
   | Fitness delta | Complexity delta | Decision |
   |---------------|-----------------|----------|
-  | Big improvement | Any | Keep |
+  | Big improvement | Any | Keep (after confirmation run if single-run) |
   | Small improvement (above significance threshold) | Deleted code | **Keep** (simplification win) |
   | Small improvement (above significance threshold) | Added clean code | Keep |
   | Small improvement | Added ugly / hacky code | **Revert** (not worth it) |
   | ~0 (below significance) | Much simpler | **Keep** (deletion alone is valuable) |
+  | ~0 (below significance) | Guard improved (compliance, safety) | **Keep** (functional win) |
   | ~0 (below significance) | Added code | **Revert** |
   | Regression | Any | **Revert** |
 

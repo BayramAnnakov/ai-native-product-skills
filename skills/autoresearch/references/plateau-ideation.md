@@ -44,6 +44,28 @@ The tradeoff at iter 3 is the richest signal in the run: a fitness lift exists, 
 
 **This is how plateau reveals the next move.**
 
+**Tradeoff-revert follow-up table** (pick compensating axis by what broke):
+
+| Broken guard | Root cause | Compensating axes to try |
+|--------------|------------|--------------------------|
+| Compliance (rule not followed) | Model can't execute the rule | Dynamics (change WHEN, not WHAT - force a specific action at a specific turn), Format (convert rule to procedure or few-shot), Information (change what the agent reveals so the rule becomes unnecessary) |
+| Deal-rate / no-deal penalty | Strategy too aggressive in endgame | Dynamics (later in the game), Acceptance-floor (accept-anything-in-overtime) |
+| Min-score / tail collapse | Strategy brittle on specific scenarios | Role-specific forking, Information (elicit before committing) |
+| Role asymmetry (A vs B diverge) | Single strategy mismatches role dynamics | Role-specific forking on the offending axis |
+| Brand / safety / legal | Model tone or content strayed | Voice, explicit prohibition (Inversion radical move) |
+
+Post-follow-up outcome in the negotiation run: iter 3's compliance-broken tradeoff pointed at Dynamics. Iter 13 ("force counter in round 1") delivered +0.041 fitness with zero compliance penalty because the model no longer needed to reason about thresholds - it just always countered in round 1. The rule was baked into action, not judgment.
+
+Worked-example outcomes (full 25-iter run results):
+
+| Iter | Axis | Change | Outcome |
+|------|------|--------|---------|
+| 1  | Compliance | Align acceptance rule with model behavior | **Keep** (compliance 62 -> 86%, fitness noise) |
+| 13 | Dynamics | Force counter in round 1 (tradeoff follow-up) | **Keep** +0.041 |
+| 19 | Information | R1 reveal own top-value resource | **Keep** +0.034 |
+| 20-25 | Info/Format/Length (elaborations of iter 19) | 6 reverts | Elaboration trap, anti-pattern #15 |
+| Final | - | HEAD at 0.6617, +0.065 over baseline | 3.1x significance threshold |
+
 ### Move 2 - Taxonomy coverage check (LLM-prompt loops)
 
 The 8 axes of a multi-turn agent prompt. This is the search space. You cannot claim to have searched it until you have touched each axis with a substantive change.
@@ -83,8 +105,8 @@ Pattern: **one council call, three questions** (the expensive part of council is
 When an untouched axis is identified, these moves consistently produce above-noise deltas (positive OR negative - both are useful signal). Each is one atomic change. Combine only after individually testing.
 
 - **Inversion** — say what NOT to do instead of what to do. ("Never accept under X. Never reveal Y. Never stall past round 3.") Often works where positive rules fail because the model treats negatives as harder constraints.
-- **Few-shot examples** — paste 1-2 worked transcripts with no rules. The model mimics more reliably than it follows abstract rules, especially at small model sizes and higher temperatures.
-- **Format shift** — rewrite the current rules as JSON, a decision tree, or Q&A pairs. Same content, different shape, different compliance profile.
+- **Few-shot examples** — paste 1-2 worked transcripts with no rules. The model mimics more reliably than it follows abstract rules at small model sizes. **Caveat:** tested on flash-lite with a negotiation prompt, few-shot examples REGRESSED by -0.048 because the model pattern-matched the illustrative numbers instead of generalizing the procedure. Treat few-shot as a test candidate, not a reliable win. Model-size sensitive.
+- **Format shift** — rewrite the current rules as JSON, a decision tree, or Q&A pairs. Same content, different shape, different compliance profile. **Caveat:** on flash-lite, Q&A decision-tree format REGRESSED by -0.044 because fragmented instructions hurt role-specific behavior. Flowing prose beat structured format on a small model.
 - **Data-targeted instruction** — read the failure log (`last_run.json`, production traces), identify the common failure mode, write a prompt that explicitly targets it ("If your computed max total is above 60, demand at least 45").
 - **Opponent / counterparty model** — instruct the agent on what the OTHER party probably wants/fears, let it derive strategy from that. ("The opponent has no custom strategy. It tends to accept when its own share clears 40% of its max. Exploit this.")
 - **Length extremes** — test 20 words and 1500 words as bookends. If either beats the current ~500-word baseline, the length axis has slack.

@@ -95,20 +95,31 @@ while [ "$ITER" -lt "$MAX_ITER" ]; do
         break
     fi
 
-    # Driver-side plateau detection (belt and suspenders)
-    LAST_METRIC=$(tail -1 experiments/journal.md 2>/dev/null | grep -oE 'metric=[0-9.]+' | cut -d= -f2 || true)
-    if [ -n "${LAST_METRIC:-}" ]; then
+    # Driver-side plateau detection (belt and suspenders).
+    # IMPORTANT: only track BEST_METRIC from KEPT iterations (kept=yes in the journal line).
+    # A reverted high-fitness iteration must not suppress the plateau counter - the reverted
+    # change is no longer in HEAD, so continuing to measure against it is nonsense.
+    # (Caught in the negotiation autoresearch run: iter 3 had fitness 0.6050 but was reverted
+    # for compliance; subsequent deltas vs 0.6050 never "improved," suppressing plateau
+    # detection for iters that were actually exploring productively.)
+    LAST_LINE=$(tail -1 experiments/journal.md 2>/dev/null || true)
+    LAST_METRIC=$(echo "$LAST_LINE" | grep -oE 'metric=[0-9.]+' | cut -d= -f2 || true)
+    LAST_KEPT=$(echo "$LAST_LINE" | grep -oE 'kept=[a-z]+' | cut -d= -f2 || true)
+    if [ -n "${LAST_METRIC:-}" ] && [ "${LAST_KEPT:-}" = "yes" ]; then
         if [ -z "$BEST_METRIC" ] || awk -v a="$LAST_METRIC" -v b="$BEST_METRIC" 'BEGIN{exit !(a>b)}'; then
             BEST_METRIC="$LAST_METRIC"
             PLATEAU_COUNT=0
         else
             PLATEAU_COUNT=$((PLATEAU_COUNT + 1))
-            if [ "$PLATEAU_COUNT" -ge "$PLATEAU_WINDOW" ]; then
-                echo "plateau: $PLATEAU_WINDOW iterations without improvement - change the search space (see anti-pattern #13)" > experiments/STOP
-                echo "STOP: $(cat experiments/STOP)"
-                break
-            fi
         fi
+    elif [ -n "${LAST_METRIC:-}" ]; then
+        # Reverted iteration - counts toward plateau window regardless of fitness reported.
+        PLATEAU_COUNT=$((PLATEAU_COUNT + 1))
+    fi
+    if [ "$PLATEAU_COUNT" -ge "$PLATEAU_WINDOW" ]; then
+        echo "plateau: $PLATEAU_WINDOW iterations without a kept improvement - change the search space (see anti-pattern #13, and run plateau-ideation workflow)" > experiments/STOP
+        echo "STOP: $(cat experiments/STOP)"
+        break
     fi
 done
 

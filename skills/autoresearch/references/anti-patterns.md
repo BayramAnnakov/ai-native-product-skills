@@ -145,6 +145,33 @@ LLM-specific. The prompt contains rules ("accept offers ≥ 60% of max," "never 
 - #5 "Looks good verification" - verification is subjective. Here verification is mechanical but measures the wrong causal chain.
 - #7 "Confounded labels" - training labels are polluted. Here there are no labels; the loop is self-evaluating via a fitness command.
 
+## 15. Elaboration trap
+
+LLM-prompt specific. After a win on axis X, the next natural iteration extends X - richer signal, more conditions, wider application of the winning idea. These extensions almost always regress. The win came from the *minimal* change, not from the axis category.
+
+**Smell:** Two to six consecutive reverts on the same axis immediately after a keep on that axis. Each revert looks like a reasonable extension of the winning idea; each regresses by 0.01-0.05.
+
+**Fix:**
+- After a keep, do NOT propose an elaboration on the same axis next. Pivot to a different untouched axis.
+- If you DO try an elaboration and it regresses, STOP extending that axis. Accept the minimal form as the local maximum for that axis and move on.
+- The winning idea often has an intentional simplicity that fights against "completing" it.
+
+**Attribution:** Observed in the negotiation autoresearch run. Iter 19 won on the information axis with a single change: "reveal own top-value resource in round 1." Five consecutive follow-ups (reveal bottom, r2 opponent-reveal response, r1 mutual disclosure, r2 conditional elicitation, r1 trade-phrasing template) all regressed. The minimal reveal triggered log-rolling; any richer signal crowded the round-1 message and slowed convergence.
+
+## 16. Load-bearing phrasing
+
+LLM-prompt specific, small models especially. Compressing a winning prompt even at full semantic parity can produce large unexplained regressions. Words you assumed were cosmetic were actually carrying behavioral load the model responds to via exact-string attention rather than meaning.
+
+**Smell:** Reordering or compressing a winning prompt for "cleanliness" regresses the score by more than the significance threshold. Each individual word-level change seems defensible; the aggregate broke the model's response pattern.
+
+**Fix:**
+- Treat a winning prompt as frozen at the wording level. Do not tidy it up.
+- If compression is attempted, it is ONE atomic experiment subject to the decision table - not a "cleanup" step.
+- Small models (flash-lite, nano, haiku-class, 7B open models) are much more sensitive to this than frontier models.
+- When proposing a new change on a different axis, insert it AROUND the winning prompt rather than editing within it.
+
+**Attribution:** Negotiation autoresearch iter 22. A semantic-preserving compression from 626 to 442 chars (e.g. "top-total" vs "highest-total resource", dropping "add the per-unit values across your share") regressed fitness by -0.042, far beyond the significance threshold.
+
 ---
 
 ## How to use this file
