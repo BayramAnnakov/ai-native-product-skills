@@ -66,6 +66,15 @@ These are why Karpathy's `autoresearch.py` is ~630 lines, not 6300. Complexity i
 
 Skip stages only when the user explicitly says "I've done that, start the loop."
 
+**Reference files map:**
+- `references/triage-checklist.md` - Stage 2 (is this problem autoresearch-shaped)
+- `references/fitness-design.md` - Stage 3 (the 7 requirements a fitness function must meet)
+- `references/modes.md` - Stage 4 (pick one: pure / barbell / via negativa / inverted / human-in-loop)
+- `references/anti-patterns.md` - Stages 3 + 5 + 6 (14 named failure modes)
+- `references/plateau-ideation.md` - Stage 5/6 (what to propose when the loop plateaus)
+
+Load each reference file on demand during the stage that needs it. Do not preload.
+
 ---
 
 ## Stage 1: Intake
@@ -199,6 +208,15 @@ Produce:
   - Broken measurement → sample size, stationarity, or confounded labels
   - Genuine local optimum → switch mode to barbell
   - Out of budget → more iterations would help
+
+**Before declaring plateau, run the ideation workflow in `references/plateau-ideation.md`.** This is mandatory, not optional. Specifically:
+
+1. Mine the last 10 reverts for pattern (axis + failure mode for each). Tradeoff reverts (primary lifted, guard broke) are especially rich - they reveal axes with slack that need compensating moves elsewhere.
+2. Run the taxonomy coverage check. If fewer than ~6 of 8 axes have been touched with substantive changes, the loop is NOT plateaued - it has exhausted one corner of the search space. Propose on an untouched axis and continue.
+3. Only when coverage is satisfied AND revert mining surfaces no untouched direction: invoke `/council` with the three structured prompts from `plateau-ideation.md` Move 3.
+4. Only when all three are exhausted: declare plateau and pick a cause above.
+
+"I ran out of ideas" is anti-pattern #13 (timid tweaks). The plateau-ideation workflow is how the skill converts that into a concrete next move instead of a stop.
 
 **The plateau diagnosis IS the deliverable when the loop doesn't improve.** Foreground it, don't bury it.
 
