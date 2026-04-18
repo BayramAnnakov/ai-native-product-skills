@@ -45,6 +45,7 @@ From Taleb. 85-90% of the system is immutable proven baseline. 10-15% is wild ex
 - B2B outbound (proven ICP + proven templates, experiment on new segments)
 - Content marketing (proven voice + proven formats, experiment on new angles)
 - Design (proven system + proven patterns, experiment on new variants)
+- LLM-prompt optimization on small / stochastic models (lock a minimalist working core that the model clearly follows, experiment with one new tactic at a time at the margin - protects against compliance decoration on speculative rules)
 - Anything reflexive where pure optimization converges to a brittle local optimum
 
 **Why it works:**

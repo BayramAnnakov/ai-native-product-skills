@@ -34,6 +34,8 @@ Is the payoff thin-tailed (small wins compound) or fat-tailed (one big hit domin
 
 If red: barbell mode is mandatory. Pure optimization on fat-tailed domains "trains a better turkey" (Taleb) - converges to a brittle local optimum that breaks when the environment shifts or adapts.
 
+**Self-play note:** when the "opponent" or evaluator is the same LLM as the agent being optimized, behavior is mildly reflexive - the opponent's distribution shifts with prompt formatting (different system-prompt lengths, verbosity, persona cues can shift response patterns independent of strategy content). Score tail shape as yellow even when the primary metric looks thin-tailed. The usual mitigations: hold the opponent's prompt strictly fixed across iterations, use a larger corpus so reflexive drift averages out, or switch to barbell with a locked minimalist core that experiments at the margin.
+
 ## 4. Sample size vs noise
 
 For one fitness evaluation, how many independent samples contribute? Is that enough to distinguish a real delta from noise?
@@ -79,6 +81,9 @@ If red: this isn't a loop, it's a design decision. Use the council skill or a pl
 | Product retention experiment | R | Y | Y | Y | Y | Barbell or human-in-loop |
 | Security hardening (CVE count) | G | G | G | G | G | Pure optimizer |
 | Content readability score | G | G | Y | G | G | Pure |
+| LLM prompt (small model, stochastic eval) | G | G | Y | Y | G | Pure with care - force n ≥ 50, run compliance audit |
+| LLM prompt (frontier model, thinking mode) | G | G | G | Y | G | Pure |
+| Agent-vs-agent self-play score | G | G | Y | Y | G | Pure with care - lock opponent prompt, enlarge corpus |
 
 ## The refusal template
 

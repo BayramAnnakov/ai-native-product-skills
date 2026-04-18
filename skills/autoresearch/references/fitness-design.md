@@ -66,6 +66,34 @@ At least one "must not regress" metric beyond the primary. Examples:
 
 A loop without guards is how you get faster code that crashes, cheaper leads that don't buy, or "engaging" content that embarrasses you.
 
+### 7. Compliance audit (LLM-prompt loops only)
+
+When the mutable surface is a prompt steering an LLM, verify the model actually follows the prompt before optimizing it. The prompt written is not the prompt followed.
+
+- Sample 5-10 traces from the baseline run
+- For each concrete rule in the prompt (acceptance thresholds, banned phrases, role-specific behavior, required outputs), check whether the model honored it
+- If compliance is below ~70%, the prompt text is decorative. Editing words the model is already ignoring moves the score on noise, not on prompt content
+- Fix before iterating, not during:
+  - Shorten and simplify - small models (flash-lite, nano, haiku-class) cannot do if/else at temperature ≥ 0.7 in a single forward pass
+  - Replace abstract rules with worked examples or persona framing (the model mimics more reliably than it reasons)
+  - Move hard rules into the scaffolding (schema constraints, tool signatures, post-hoc filters) so the model cannot violate them even when it ignores the prompt
+
+When compliance is unverified, the loop optimizes the wrong object. See anti-pattern #14.
+
+---
+
+## Stochastic evaluator variance handling
+
+When the fitness function itself is stochastic (LLM temperature, simulated opponent, randomized environment), the noise floor dominates everything else.
+
+- Fix seeds for the **corpus** (which examples run). Accept randomness in the **evaluator** (temperature, opponent stochasticity). Never average across both sources without separating them.
+- Significance threshold = 2 × standard error of the mean, not 2 × std of individual samples. With per-sample std of 0.2 and n=10, SE is ~0.063 - no plausible small improvement beats it. At n=50, SE is ~0.028. Growing the corpus is almost always higher-leverage than a cleverer search.
+- For borderline wins (delta between 1× and 2× SE), re-run with a different seed tuple before keeping. Cheap insurance against noise-induced drift.
+- Prefer a larger fixed corpus over more seeds of a small corpus. The variance reduction is the same in aggregate, but a single fixed corpus keeps per-iteration debugging tractable.
+- Report the **tail** (min, p10) alongside the mean when the metric has a cliff (no-deal penalty, refund trigger, safety violation). A 0.60 mean with min 0.46 is a different strategy from a 0.60 mean with min -0.50.
+
+**Rule of thumb:** most LLM-prompt autoresearch failures are fitness-function failures wearing a prompt-engineering mask. If your per-sample std is 0.2 and your corpus is 10, no amount of prompt cleverness can beat the noise floor.
+
 ---
 
 ## Common failures
@@ -159,6 +187,24 @@ Collapsing a multi-objective problem into one number, when the real goal is "max
 
 - Pure subjective. Must be wrapped in a rubric-driven LLM judge with fixed seed, or switched to human-in-loop mode. Until then, the loop cannot run.
 
+### Good fitness: LLM-prompt optimization (negotiation case study)
+
+Canonical Karpathy-style use case - a single-file prompt steers an LLM agent against a scored benchmark.
+
+- **Mutable surface:** `strategy.txt` (one file, ≤2000 chars), read into the agent's system prompt every game
+- **Command:** `bash evaluate.sh` - runs 50 negotiation games (25 as player A, 25 as B) against a baseline opponent at seed 42, prints `mean_score`, `std_error`, `deal_rate`, `mean_as_A`, `mean_as_B`, `min_score`
+- **Corpus:** fixed game scenarios (pools + valuations) drawn from seed 42, n=50. Frozen across iterations.
+- **Baseline:** mean 0.60, deal_rate 1.00, SE 0.015 (from 5 repeat runs of the full n=50 eval - NOT 5 runs of n=10, which gave SE 0.032 and made keep/revert a coin flip)
+- **Significance threshold:** ±0.03 (2× SE). Borderline wins (0.015-0.030) require a second seed before keeping.
+- **Sanity check:** score the shipped example prompts (`cooperative.txt`, `aggressive.txt`). They must rank differently. If they don't, the metric doesn't discriminate strategy content from noise and the loop cannot start.
+- **Compliance audit (req #7):** open 5 game transcripts. For each: does the agent follow the acceptance threshold written in the prompt? Does it leak per-unit point values in public messages despite a "never reveal" rule? If compliance is below 70%, rewrite the prompt shorter / more concrete before iterating - prompt-text search on a model that ignores the prompt is pure noise chasing.
+- **Guards:**
+  - `deal_rate` must stay at 1.00 (each no-deal costs -0.5, dominating small mean gains)
+  - `min_score` must stay above -0.3
+  - Role-symmetry: `abs(mean_as_A - mean_as_B)` stays below 0.10. A strategy that scores 0.70 as A and 0.35 as B only works from one seat and is brittle in deployment.
+
+**Lesson from the original run:** four experiments were run at n=10 before the `/council` review caught that SE was 0.032 - bigger than any claimed improvement. The highest-leverage change was not a smarter prompt; it was moving the evaluator from n=10 to n=50. If this fitness-design checklist had been followed in Stage 3, those four experiments would have been the fitness-design work, not the research.
+
 ---
 
 ## The exit question
@@ -170,3 +216,9 @@ Before starting the loop, the user must be able to answer:
 If the answer is no, or "it depends," the fitness function isn't ready. Go back and fix it.
 
 This is the question Karpathy meant by "what is your val_bpb?" The loop only works when this question has a crisp answer.
+
+**For LLM-prompt loops, add a second exit question:**
+
+> "If I hand the model the 'winning' prompt and read 5 transcripts, is the model visibly doing what the prompt says - or is the prompt decorative?"
+
+If decorative, you are optimizing a caption, not a behavior. Rewrite the prompt or move the rules into the scaffolding before iterating.

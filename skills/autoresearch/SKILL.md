@@ -202,6 +202,18 @@ Produce:
 
 **The plateau diagnosis IS the deliverable when the loop doesn't improve.** Foreground it, don't bury it.
 
+### Escalation: invoke `/council` on a plateaued loop
+
+When the loop plateaus and you own the mutable surface, the mode, and the fitness function, the failure is usually **invisible from inside the loop** - wrong sample size, unverified compliance, a metric that doesn't discriminate, confounded labels, or a mutable surface that no longer holds leverage. These are exactly the findings a multi-perspective review delivers cheaply in one pass.
+
+Before switching modes or mutable surfaces, spend a single `/council` call. Canonical prompt:
+
+> Goal, fitness, baseline, significance threshold, mode, last 10 journal lines - the loop has plateaued. What is the loop missing that an outsider would notice?
+
+A council that agrees with your reading tells you the loop is genuinely stuck on the right problem. A council that disagrees usually names the specific failure mode from `references/anti-patterns.md` - which is exactly the plateau diagnosis you were about to struggle to produce alone.
+
+This is different from anti-pattern #10 ("use council for architecture, not tactics"). Council here is a second-opinion tool on the loop itself, not an architecture substitute. On a real autoresearch run, a plateau-council review produced the two highest-leverage fixes (enlarge sample size, verify compliance) that the loop couldn't see from inside.
+
 ---
 
 ## Style rules for this skill

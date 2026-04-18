@@ -126,6 +126,25 @@ Escalate the AMBITION of changes, not the iteration count. The loop keeps runnin
 
 **Attribution:** Karpathy's `program.md` NEVER STOP rule + simplicity criterion, plus the plateau council's "prompt text search is exhausted" observation (all panelists flagged this within ~15 iterations of the ICP scorer run).
 
+## 14. Compliance decoration
+
+LLM-specific. The prompt contains rules ("accept offers ≥ 60% of max," "never reveal your point values," "be aggressive as Player A") but the model silently ignores them. Optimizing the text of rules the model treats as vibes moves the score on noise, not on prompt content.
+
+**Smell:** Spot-checking 5 traces shows the model violating the very rules in the prompt. Fitness deltas do not correlate sensibly with prompt edits - tiny edits produce large swings, substantive rewrites produce no change. The loop feels like a random walk because it is one: the causal link between prompt text and agent behavior is broken.
+
+**Fix (fitness-design.md requirement #7):**
+- Measure compliance on a sample of baseline traces BEFORE iterating. Below ~70%, stop and rewrite.
+- Shorten drastically. Small models (flash-lite, nano, haiku-class) cannot execute if/else at temperature ≥ 0.7 in a single forward pass without thinking mode. Instructions degrade into tone cues.
+- Replace abstract rules with worked examples or persona framing. The model mimics more reliably than it reasons.
+- Move hard rules into the scaffolding - schema constraints, tool signatures, post-processing filters, deterministic acceptance logic outside the LLM. The model cannot violate a rule that isn't its responsibility to enforce.
+
+**Attribution:** Kahneman, on the negotiation autoresearch plateau: *"Before optimizing what the strategy says, verify whether the model follows it."* The agent was accepting 0.53 deals with a 0.60 threshold in the prompt and publicly announcing its per-unit point values while the prompt said "never reveal." Four experiments optimized around rules the model was not following.
+
+**How it differs from nearby patterns:**
+- #1 "Astrology chart" - metric is arbitrary. Here the metric is fine; the prompt-to-behavior mapping is broken.
+- #5 "Looks good verification" - verification is subjective. Here verification is mechanical but measures the wrong causal chain.
+- #7 "Confounded labels" - training labels are polluted. Here there are no labels; the loop is self-evaluating via a fitness command.
+
 ---
 
 ## How to use this file
