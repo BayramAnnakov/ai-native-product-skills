@@ -124,6 +124,8 @@ Escalate the AMBITION of changes, not the iteration count. The loop keeps runnin
 
 **Worth emphasizing because people get it backwards:** the simplicity criterion (keep deletions even at zero fitness gain) is NOT "make small, timid changes." It is "when weighing complexity against fitness, simplifications are always keepers." Bold, radical experiments are still welcome - they just need to justify their complexity cost with a matching fitness gain.
 
+**Interaction with #15 (Elaboration trap):** #15 says "after a win, don't default to elaborating the same axis." #13 says "when stuck on a plateau, escalate ambition, which may include radical changes on any axis." Sequence when both apply: after a keep, first try a pivot to a different axis. If multiple pivots fail, #13 escalation takes over and elaborations on the winning axis become legitimate as radical moves (with the model-size caveats in `plateau-ideation.md`).
+
 **Attribution:** Karpathy's `program.md` NEVER STOP rule + simplicity criterion, plus the plateau council's "prompt text search is exhausted" observation (all panelists flagged this within ~15 iterations of the ICP scorer run).
 
 ## 14. Compliance decoration
@@ -147,30 +149,35 @@ LLM-specific. The prompt contains rules ("accept offers ≥ 60% of max," "never 
 
 ## 15. Elaboration trap
 
-LLM-prompt specific. After a win on axis X, the next natural iteration extends X - richer signal, more conditions, wider application of the winning idea. These extensions almost always regress. The win came from the *minimal* change, not from the axis category.
+**Scope:** LLM-prompt optimization on small models (flash-lite, haiku-class, nano, ~7B open models) with structural axis wins (dynamics, information-flow, acceptance logic). Not yet validated on frontier models, single-shot prompts, or non-LLM autoresearch. Treat as a hypothesis to test on your problem, not a universal law.
 
-**Smell:** Two to six consecutive reverts on the same axis immediately after a keep on that axis. Each revert looks like a reasonable extension of the winning idea; each regresses by 0.01-0.05.
+**Pattern:** after a win on axis X, the next natural iteration extends X - richer signal, more conditions, wider application of the winning idea. In the one case study this has been measured (see attribution), these extensions regressed consistently. Plausible mechanism: the win came from the *minimal* signal, and elaborations crowd it with noise the small model can't disambiguate.
+
+**Smell:** Two or more consecutive reverts on the same axis immediately after a keep on that axis. Each revert looks like a reasonable extension of the winning idea; each regresses by more than the significance threshold.
 
 **Fix:**
-- After a keep, do NOT propose an elaboration on the same axis next. Pivot to a different untouched axis.
-- If you DO try an elaboration and it regresses, STOP extending that axis. Accept the minimal form as the local maximum for that axis and move on.
-- The winning idea often has an intentional simplicity that fights against "completing" it.
+- After a keep, first try a change on a different untouched axis. If that change fails on its own merits (not just because the win was on a different axis), come back and elaborate as a radical move under #13.
+- If you DO try an elaboration and it regresses, treat that as signal: the minimal form is likely the local maximum for that axis for now.
+- **Tension with #13 (escalate ambition when stuck):** if pivots to different axes also plateau, elaborations become legitimate under #13. Sequence: win -> pivot -> if plateau, then elaborate with radical moves. This file doesn't forbid elaboration; it says "don't default to it as the reflex next step."
 
-**Attribution:** Observed in the negotiation autoresearch run. Iter 19 won on the information axis with a single change: "reveal own top-value resource in round 1." Five consecutive follow-ups (reveal bottom, r2 opponent-reveal response, r1 mutual disclosure, r2 conditional elicitation, r1 trade-phrasing template) all regressed. The minimal reveal triggered log-rolling; any richer signal crowded the round-1 message and slowed convergence.
+**Attribution:** Observed in the negotiation autoresearch run. Iter 19 won on the information axis with a single change: "reveal own top-value resource in round 1." Five consecutive follow-ups (reveal bottom, r2 opponent-reveal response, r1 mutual disclosure, r2 conditional elicitation, r1 trade-phrasing template) all regressed. Single run; pattern needs replication before it is a law.
 
 ## 16. Load-bearing phrasing
 
-LLM-prompt specific, small models especially. Compressing a winning prompt even at full semantic parity can produce large unexplained regressions. Words you assumed were cosmetic were actually carrying behavioral load the model responds to via exact-string attention rather than meaning.
+**Scope:** LLM-prompt optimization on small models. Frontier models likely less sensitive. Single observation to date - treat as risk note, not a ban.
 
-**Smell:** Reordering or compressing a winning prompt for "cleanliness" regresses the score by more than the significance threshold. Each individual word-level change seems defensible; the aggregate broke the model's response pattern.
+**Pattern:** compressing a winning prompt even at full semantic parity can produce regressions beyond the significance threshold. Words you assumed were cosmetic may be carrying behavioral load the small model responds to via exact-string attention rather than meaning.
 
-**Fix:**
-- Treat a winning prompt as frozen at the wording level. Do not tidy it up.
-- If compression is attempted, it is ONE atomic experiment subject to the decision table - not a "cleanup" step.
-- Small models (flash-lite, nano, haiku-class, 7B open models) are much more sensitive to this than frontier models.
-- When proposing a new change on a different axis, insert it AROUND the winning prompt rather than editing within it.
+**Smell:** A compression pass that preserves semantics regresses fitness substantially; each individual word-level change seems defensible but the aggregate broke the model's response pattern.
 
-**Attribution:** Negotiation autoresearch iter 22. A semantic-preserving compression from 626 to 442 chars (e.g. "top-total" vs "highest-total resource", dropping "add the per-unit values across your share") regressed fitness by -0.042, far beyond the significance threshold.
+**Fix (reconciled with the simplicity criterion):**
+- The simplicity criterion still applies - if you try compression and fitness holds or improves, keep it (this is the win Karpathy highlighted). #16 is not a prohibition on compression; it is a **prior** that compressions of a winning prompt carry above-average regression risk on small models.
+- Treat any compression of a winning prompt as ONE atomic experiment subject to the decision table, same as any other change. Don't treat it as a "cleanup step" exempt from fitness checking.
+- When adding a change on a different axis, prefer inserting AROUND the winning prompt rather than rewriting within it - this reduces the surface area where load-bearing wording might be disturbed.
+
+**When this does NOT apply:** frontier models (Opus, Sonnet, GPT-5 class) appear more robust to semantic-preserving compression in anecdotal observation, though this is not systematically tested. Single-shot prompts (classification, extraction) are also probably less sensitive than multi-turn agent prompts.
+
+**Attribution:** Negotiation autoresearch iter 22. A compression from 626 to 442 chars (claimed semantic parity) regressed fitness by -0.042. N=1. Replication needed before this is load-bearing as a recommendation.
 
 ---
 

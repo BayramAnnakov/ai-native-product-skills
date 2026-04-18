@@ -4,6 +4,8 @@ When the loop plateaus on prompt-text optimization, the default failure is anti-
 
 **Principle:** ideas are not random. Good ideas come from applying structure to existing signal. The richest signal you already have is the revert log itself — do not reach for `/council` before you have mined it.
 
+**Evidence scope for this file.** The four ideation moves (revert-pattern mining, taxonomy coverage, structured /council, radical-move catalog) are general. The specific *content* in this file - the 8-axis taxonomy, the tradeoff-revert follow-up table, the radical-move caveats - is derived from a single detailed case study (negotiation autoresearch, flash-lite at temperature 0.7, multi-turn agent prompts, compliance-type guard). Treat those specifics as **hypotheses to test on your problem, not universal laws**. When they fit, they save iterations; when they don't fit, they mislead. Users running on different problem archetypes (single-shot classification, content generation, retrieval, code generation) should adapt the taxonomy and tables rather than apply them verbatim.
+
 Use this file when:
 - The driver is about to write `experiments/STOP` with a plateau reason
 - You manually hit an idea drought ("I don't know what to try next")
@@ -44,17 +46,21 @@ The tradeoff at iter 3 is the richest signal in the run: a fitness lift exists, 
 
 **This is how plateau reveals the next move.**
 
-**Tradeoff-revert follow-up table** (pick compensating axis by what broke):
+**Tradeoff-revert follow-up principle (general):** pick a compensating axis that does NOT require the model to obey the rule the broken guard proved it can't obey. Example: if compliance broke because the model won't follow a threshold, don't find a cleverer threshold rule - find an axis where the desired behavior is baked into action (Dynamics: "always counter in round 1") instead of judgment.
 
-| Broken guard | Root cause | Compensating axes to try |
+**Mapping table (illustrative, NOT universal).** The axes below are derived from one multi-turn-agent-prompt case study (negotiation challenge, flash-lite, compliance-type guard). For other problem archetypes (single-shot classification, content generation, retrieval), the principle above generalizes but the specific axis mappings will not. Treat as worked examples, not prescriptions:
+
+| Broken guard | Root cause | Compensating axes to try (negotiation-style prompts) |
 |--------------|------------|--------------------------|
-| Compliance (rule not followed) | Model can't execute the rule | Dynamics (change WHEN, not WHAT - force a specific action at a specific turn), Format (convert rule to procedure or few-shot), Information (change what the agent reveals so the rule becomes unnecessary) |
-| Deal-rate / no-deal penalty | Strategy too aggressive in endgame | Dynamics (later in the game), Acceptance-floor (accept-anything-in-overtime) |
+| Compliance (rule not followed) | Model can't execute the rule | Dynamics (change WHEN, not WHAT), Format (rule -> procedure), Information (change what's revealed so the rule becomes unnecessary) |
+| Deal-rate / no-deal penalty | Strategy too aggressive in endgame | Dynamics (softer in late rounds), Acceptance-floor (accept-anything-in-overtime) |
 | Min-score / tail collapse | Strategy brittle on specific scenarios | Role-specific forking, Information (elicit before committing) |
 | Role asymmetry (A vs B diverge) | Single strategy mismatches role dynamics | Role-specific forking on the offending axis |
 | Brand / safety / legal | Model tone or content strayed | Voice, explicit prohibition (Inversion radical move) |
 
-Post-follow-up outcome in the negotiation run: iter 3's compliance-broken tradeoff pointed at Dynamics. Iter 13 ("force counter in round 1") delivered +0.041 fitness with zero compliance penalty because the model no longer needed to reason about thresholds - it just always countered in round 1. The rule was baked into action, not judgment.
+**Close the loop.** Once a compensating axis delivers the gain, **treat the originally-broken axis as closed for this loop**. Do not re-open it in subsequent iterations. The tradeoff revert was a *pointer away from* that axis, not an invitation to keep trying it with slight variations. (Observed failure mode: in our case study, an iteration tried to re-tighten the compliance-broken acceptance threshold *after* the dynamics compensation already delivered +0.041. That follow-up regressed in noise - the dynamics win had already captured the selectivity effect; adding the acceptance tightening on top just added complexity with no gain.)
+
+Post-follow-up outcome in the case study: iter 3's compliance-broken tradeoff pointed at Dynamics. Iter 13 ("force counter in round 1") delivered +0.041 fitness with zero compliance penalty because the model no longer needed to reason about thresholds - it just always countered in round 1. The rule was baked into action, not judgment.
 
 Worked-example outcomes (full 25-iter run results):
 
@@ -105,8 +111,8 @@ Pattern: **one council call, three questions** (the expensive part of council is
 When an untouched axis is identified, these moves consistently produce above-noise deltas (positive OR negative - both are useful signal). Each is one atomic change. Combine only after individually testing.
 
 - **Inversion** — say what NOT to do instead of what to do. ("Never accept under X. Never reveal Y. Never stall past round 3.") Often works where positive rules fail because the model treats negatives as harder constraints.
-- **Few-shot examples** — paste 1-2 worked transcripts with no rules. The model mimics more reliably than it follows abstract rules at small model sizes. **Caveat:** tested on flash-lite with a negotiation prompt, few-shot examples REGRESSED by -0.048 because the model pattern-matched the illustrative numbers instead of generalizing the procedure. Treat few-shot as a test candidate, not a reliable win. Model-size sensitive.
-- **Format shift** — rewrite the current rules as JSON, a decision tree, or Q&A pairs. Same content, different shape, different compliance profile. **Caveat:** on flash-lite, Q&A decision-tree format REGRESSED by -0.044 because fragmented instructions hurt role-specific behavior. Flowing prose beat structured format on a small model.
+- **Few-shot examples** — paste 1-2 worked transcripts with no rules. Often a reliable win at frontier model sizes (Opus/Sonnet/GPT-5-class) and for classification/extraction tasks. **Small-model negotiation caveat (n=1):** flash-lite on a numeric negotiation prompt pattern-matched the illustrative numbers instead of generalizing the procedure and regressed by -0.048. Scope the caveat: applies when (a) model is small and (b) the task has numbers the model could mis-bind to. Still worth trying on non-numeric or larger-model problems.
+- **Format shift** — rewrite the current rules as JSON, a decision tree, or Q&A pairs. Same content, different shape, different compliance profile. **Small-model caveat (n=1):** on flash-lite with a flowing-prose winning baseline, Q&A decision-tree fragmentation regressed -0.044. Plausible mechanism: structured formats can hurt when the winning baseline relies on prose-level behavioral cues. Not validated on frontier models or non-agent prompts.
 - **Data-targeted instruction** — read the failure log (`last_run.json`, production traces), identify the common failure mode, write a prompt that explicitly targets it ("If your computed max total is above 60, demand at least 45").
 - **Opponent / counterparty model** — instruct the agent on what the OTHER party probably wants/fears, let it derive strategy from that. ("The opponent has no custom strategy. It tends to accept when its own share clears 40% of its max. Exploit this.")
 - **Length extremes** — test 20 words and 1500 words as bookends. If either beats the current ~500-word baseline, the length axis has slack.
