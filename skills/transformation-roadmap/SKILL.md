@@ -44,8 +44,8 @@ Tailor the rest of the plan to the persona they pick. If they refuse to pick, de
 The plan only works if these three are concrete. Push back on any vague answer.
 
 1. **Trojan horse first project** — small, reversible, demonstrably better. NOT "transform the org." ONE specific workflow with a real owner.
-2. **One transformation metric** — the single number that proves it worked by Day 90 (PRs/week, time-to-prototype, escalation rate, meeting duration, deflection rate, etc.). Must be measurable today as a baseline.
-3. **One role-shift commitment** — the one role you redefine in writing by Day 30, with an updated JD line or workflow change.
+2. **One transformation metric** — the single number that proves it worked by Day 90 (PRs/week, time-to-prototype, escalation rate, meeting duration, deflection rate, etc.). Must be measurable today as a baseline. **If the user offers multiple candidates, push for the most MECHANICAL one** — the one with no human judgment in the measurement (e.g. "hours per video" beats "video quality" beats "team happiness"). Lagging metrics like "repeat purchase" are valid only if they'll show movement by Day 90; otherwise pair them with a leading proxy.
+3. **One role-shift commitment** — the one role you redefine in writing by Day 30, with an updated JD line or workflow change. **Small-team rule:** if the team has ≤5 people, surface a role-shift for EVERY person, not just one. In a 2-person team, "what does the founder stop doing" is half the answer. Don't let one person carry the whole transformation.
 
 **Vague vs concrete examples** to use when pushing back:
 - ❌ "Sales pipeline review" → ✅ "Cut weekly pipeline-review meeting time from 90 min to 15 min by automating the prep with `/weekly-pipeline-prep`, measured by meeting duration logged in calendar"
@@ -74,14 +74,12 @@ Write the file with the structure below. **Only include persona-specific section
 - **Sandbox policy:** [team default]
 
 ## Role Shifts (Day 30-60)
-For each role on this team, current → target. Don't list roles not on the team.
+List one row per actual person on this team (not per generic function). For ≤5-person teams, every person gets a row. Use a real 2026 title when the work maps cleanly; coin a team-native title when it doesn't.
 
-| Role | Current | Target by Day 60 | JD/workflow change |
+| Person | Current role | Target by Day 60 | Specific change in writing |
 |---|---|---|---|
-| [PM]  | [current] | [Builder PM / Product Builder] | [specific change] |
-| [Eng] | [current] | [Harness Engineer (10-20% time)] | [specific change] |
-| [Designer] | [current] | [Designer-with-MCP] | [specific change] |
-| [QA] | [current] | [Eval Engineer] | [specific change] |
+| [name 1] | [current] | [Builder PM / Workshop Production Engineer / etc.] | [JD line or workflow change] |
+| [name 2] | [current] | [Harness Engineer / Eval Engineer / etc.] | [JD line or workflow change] |
 
 ## 30/60/90 Milestones
 
@@ -191,7 +189,7 @@ Generate it as a minute-by-minute schedule, not a vague task list.
 - **Push back on vague.** "Improve velocity" isn't a metric. "Median PRs/engineer/week from 2.1 to 4.0" is.
 - **Persona-tailor, don't menu-display.** Pick ONE persona section, delete the others. The roadmap is shorter for it.
 - **Reversibility framing matters.** Anchor Governance Charter on what's reversible (AI runs unsupervised) vs irreversible (human-in-loop). Push the user to draw the line explicitly for THEIR product surface.
-- **Anchor role shifts to real 2026 JDs.** Anthropic's Forward Deployed Engineer ships "MCP servers, sub-agents, agent skills." That's the shape of an FDE-grade role-shift commitment.
+- **Anchor role shifts to the work, not the title.** Use real 2026 titles (Forward Deployed Engineer, Builder PM, Harness Engineer) when the work actually maps. When it doesn't, coin a team-specific title that names the work — e.g. "Workshop Production Engineer" for a course producer who runs an AI-driven publishing pipeline reads more native than "Eval Engineer." The shape of the commitment matters more than the trendy label. For the FDE shape specifically: ships MCP servers, sub-agents, and skills against a production workflow.
 - **Stage gates protect ambition from delusion.** Most teams end 90 days at Stage 2→3. Stage 4 is 6-12 months. Stage 5 is what Anthropic and OpenAI describe internally — don't pretend to be there before you are.
 - **Save the file before celebrating.** No file = no plan.
 

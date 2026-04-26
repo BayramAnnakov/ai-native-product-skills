@@ -1,7 +1,7 @@
 {
   "name": "ai-native-product-skills",
   "description": "Skills for AI-native product teams: team autonomy assessment (/team-assess), multi-perspective AI council (/council), autonomous prototype builder (/prototype), generalized autoresearch loop (/autoresearch) with autonomous claude -p driver, and 90-day team transformation roadmap coach (/transformation-roadmap).",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "author": {
     "name": "Bayram Annakov",
     "email": "bayram@onsa.ai"
