@@ -96,6 +96,26 @@ Apply Karpathy's [autoresearch](https://github.com/karpathy/autoresearch) loop (
 
 **Structure:** Unlike the other skills in this plugin, `/autoresearch` is multi-file - `SKILL.md` is the entry point (5-stage flow + simplicity principles), deeper reference files (`triage-checklist.md`, `fitness-design.md`, `modes.md`, `anti-patterns.md` with 13 patterns) are loaded progressively, and `templates/` contains `goal.md`, `loop-driver.sh`, and `iteration-prompt.md` scaffolds copied to the user's working directory in Stage 5.
 
+### `/transformation-roadmap` - 90-Day Team Transformation Coach
+
+Coach a product leader through producing a 90-day team-transformation plan. Diagnoses current AI maturity from existing artifacts (CLAUDE.md, team-assessment), frames by persona, forces commitment to a trojan horse + transformation metric + role-shift, and writes `transformation-roadmap.md` with explicit stage gates. Designed to run after `/team-assess` to convert the assessment into action.
+
+**What it does:**
+- Reads prior artifacts silently (CLAUDE.md, team-profile.md, team-assessment.md) — or asks 3 short questions if missing
+- Picks one of three personas: **Enterprise Transformer**, **Speed-Obsessed Leader**, or **Startup Founder-Builder** — and tailors the roadmap to that persona only
+- Forces commitment to **three non-negotiables**: trojan horse first project, one transformation metric, one role-shift commitment in writing by Day 30
+- Pushes back on vague answers ("improve velocity" → "median PRs/engineer/week 2.1 → 4.0")
+- Generates `transformation-roadmap.md` with: trojan horse, governance charter, role shifts, 30/60/90 milestones, **stage gates** (where you are vs where you're going across the 5-stage transformation arc), pilot team, what you stop doing, risks, plus persona-specific section (Leadership Pitch / 10× Lever / Roles I Don't Hire)
+- Reads back trojan horse + metric + role-shift in one paragraph for confirmation
+- Optional: produces `day-1-checklist.md` — the literal first-90-min Monday playbook
+
+**Stage gates** are derived from cross-referencing OpenAI's Harness post + Anthropic Skills/FDE + Stripe Toolshed + Cognition Fleet of Devins + MIT CISR — most teams end 90 days at the Stage 2→3 boundary.
+
+**Example invocations:**
+- `/transformation-roadmap` (uses workspace context)
+- `/transformation-roadmap remote 8-person fintech, regulated`
+- `/transformation-roadmap solo founder, B2C app`
+
 ## Installation
 
 ### Option 1: Plugin marketplace (recommended)
@@ -120,9 +140,12 @@ curl -o .claude/commands/council.md https://raw.githubusercontent.com/BayramAnna
 
 # Prototype
 curl -o .claude/commands/prototype.md https://raw.githubusercontent.com/BayramAnnakov/ai-native-product-skills/main/skills/prototype/SKILL.md
+
+# Transformation Roadmap
+curl -o .claude/commands/transformation-roadmap.md https://raw.githubusercontent.com/BayramAnnakov/ai-native-product-skills/main/skills/transformation-roadmap/SKILL.md
 ```
 
-For `/autoresearch` (multi-file skill with references/ and templates/), use git clone instead:
+For `/autoresearch` (multi-file skill with references/ and templates/), use git clone instead. Same pattern works for any other multi-file skill in the marketplace:
 
 ```bash
 cd ~/.claude/skills
